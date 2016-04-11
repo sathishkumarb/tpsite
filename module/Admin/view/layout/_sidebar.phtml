@@ -1,0 +1,88 @@
+<nav class="main-menu" data-step='2' data-intro='This is the extendable Main Navigation Menu.' data-position='right'>
+    <ul>
+        <li><a href="<?php echo $this->url('admindashboard'); ?>"> <i class="mapsicon"></i> <span class="nav-text padingnav"> Dashboard </span> </a> </li>
+        <li class="has-subnav"> <a href="javascript:;"> <i class="drivicon navicon"></i> <span class="nav-text padingnav"> Admin Settings </span> <i class="icon-angle-right"></i> </a>
+            <ul>
+                <li><a class="subnav-text" href="<?php echo $this->url('adminchangepassword'); ?>"> Change Password </a> </li>
+                <li><a class="subnav-text" href="<?php echo $this->url('adminsettings'); ?>"> Edit Basic Details </a> </li>
+            </ul>
+        </li>
+        <li class="has-subnav"> <a href="javascript:;"><i class="managejob-icon"></i> <span class="nav-text padingnav"> Manage Categories </span><i class="icon-angle-right"></i></a>
+            <ul>
+                <li><a class="subnav-text" href="<?php echo $this->url('categoryindex'); ?>">Category List </span> </a> </li>
+                <li><a class="subnav-text" href="<?php echo $this->url('addcategory'); ?>"> Add Category </span> </a> </li>                
+            </ul>
+        </li>
+        <li><a href="<?php echo $this->url('cmsindex'); ?>"> <i class="fleetsicon"></i> <span class="nav-text padingnav"> Manage CMS </span> </a> </li>
+        <li><a href="<?php echo $this->url('emailindex'); ?>"> <i class="pricingicon"></i> <span class="nav-text padingnav"> Manage Email Template </span> </a> </li>
+        <li class="has-subnav"> <a href="javascript:;"> <i class="customericon"></i> <span class="nav-text padingnav"> Manage Users </span> <i class="icon-angle-right"></i> </a>
+            <ul>
+                <li><a class="subnav-text" href="<?php echo $this->url('users'); ?>"> User List</span> </a> </li>
+            </ul>
+        </li>
+        <li class="has-subnav"> <a href="javascript:;"> <i class="tripsicon"></i> <span class="nav-text padingnav"> Manage Event </span> <i class="icon-angle-right"></i> </a>
+            <ul>
+                <li><a class="subnav-text" href="<?php echo $this->url('listevent'); ?>"> Event List </span> </a> </li>
+                <li><a class="subnav-text" href="<?php echo $this->url('addevent'); ?>"> Add Event </a> </li>
+                <!--added by Yesh-->
+                <li><a class="subnav-text" href="<?php echo $this->url('eventreports'); ?>"> Event Report </a> </li>
+                <li><a class="subnav-text" href="<?php echo $this->url('blockrelease'); ?>"> Block / Release </a> </li>
+                <!--added by Yesh-->
+            </ul>
+        </li>
+<!--<li class="has-subnav"> <a href="javascript:;"> <i class="fleetsicon"></i> <span class="nav-text padingnav"> Fleets </span> <i class="icon-angle-right"></i> </a>
+<ul>
+<li> <a class="subnav-text" href="allfleets.html"> All Fleets</span> </a> </li>
+<li> <a class="subnav-text" href="addfleets.html"> Add Fleets </a> </li>
+<li> <a class="subnav-text" href="carmodels.html"> Car Models </a> </li>
+</ul>
+</li>
+<li class="has-subnav"> <a href="javascript:;"> <i class="managejob-icon"></i> <span class="nav-text padingnav"> Manage Job </span> <i class="icon-angle-right"></i> </a>
+<ul>
+<li> <a class="subnav-text" href="addjob.html"> Add Job</span> </a> </li>
+<li> <a class="subnav-text" href="listofjob.html"> List of Job </a> </li>
+</ul>
+</li>
+<li class="has-subnav"> <a href="javascript:;"> <i class="pricingicon"></i> <span class="nav-text padingnav"> Pricing </span> <i class="icon-angle-right"></i> </a>
+<ul>
+<li> <a class="subnav-text" href="allpricing.html"> All Pricing</span> </a> </li>
+</ul>
+</li>
+<li class="has-subnav"> <a href="javascript:;"> <i class="tripsicon"></i> <span class="nav-text padingnav"> Trips </span> <i class="icon-angle-right"></i> </a>
+<ul>
+<li> <a class="subnav-text" href="tripdetails.html"> Trips Detail</span> </a> </li>
+<li> <a class="subnav-text" href="alltrips.html"> All Trips</span> </a> </li>
+<li> <a class="subnav-text" href="ongoingtrips.html"> Ongoing Trips </a> </li>
+<li> <a class="subnav-text" href="cancel.html"> Cancel </a> </li>
+<li> <a class="subnav-text" href="decline.html"> Decline </a> </li>
+<li> <a class="subnav-text" href="noshow.html"> No Show </a> </li>
+<li> <a class="subnav-text" href="closedtrip.html"> Closed Trip </a> </li>
+</ul>
+</li>-->
+<!-- <li> <a data-toggle="modal" href="#tax"> <i class="taxicon"></i> <span class="nav-text padingnav"> Tax </span> </a> </li>
+<li> <a data-toggle="modal" href="#backfund"> <i class="backfundicon"></i> <span class="nav-text padingnav"> Back Fund </span> </a> </li>
+<li> <a data-toggle="modal" href="#toll"> <i class="toolicon"></i> <span class="nav-text padingnav"> Toll </span> </a> </li>
+<li> <a data-toggle="modal"> <i class="closdtrp"></i> <span class="nav-text padingnav"> Metrics </span> </a>
+<ul>
+<li> <a class="subnav-text" href="metrics.html"> Metrics </a> </li>
+</ul>
+</li>
+<li class="has-subnav"> <a href="javascript:;"> <i class="manageAicon"></i> <span class="nav-text padingnav"> Manage Amount </span> <i class="icon-angle-right"></i> </a>
+<ul>
+<li> <a class="subnav-text" href="add-amount.html"> Add Amount</span> </a> </li>
+<li> <a class="subnav-text" href="view-amount.html"> View Amount</span> </a> </li>
+<li> <a class="subnav-text" href="all-jobs.html"> All Jobs</span> </a> </li>
+</ul>
+</li>
+<li class="has-subnav"> <a href="javascript:;"> <i class="manageActaxi"></i> <span class="nav-text padingnav"> Manage Account </span> <i class="icon-angle-right"></i> </a>
+<ul>
+<li> <a class="subnav-text" href="add-account.html"> Add Account</span> </a> </li>
+<li> <a class="subnav-text" href="listof-amount.html"> List of Account</span> </a> </li>
+<li> <a class="subnav-text" href="payout.html"> Pay out</span> </a> </li>
+</ul>
+</li>-->
+    </ul>
+    <ul class="logout">
+        <li> <a href="<?php echo $this->url('adminlogout'); ?>"> <i class="icon-off nav-icon"></i> <span class="nav-text"> Logout </span> </a> </li>
+    </ul>
+</nav>

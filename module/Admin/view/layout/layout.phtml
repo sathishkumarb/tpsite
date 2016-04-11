@@ -1,0 +1,138 @@
+<?php echo $this->doctype(); ?>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7 lt-ie10"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8 lt-ie10"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js"> <!--<![endif]-->
+
+        <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><?php echo $pageTitle; ?></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <?php echo $this->headLink(/*array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')*/)
+                ->prependStylesheet($this->basePath('assets/admin/styles/bootstrap.css'))
+                ->appendStylesheet($this->basePath('assets/admin/styles/vendor/jquery.pnotify.default.css'))
+                ->appendStylesheet($this->basePath('assets/admin/styles/vendor/select2/select2.css'))
+                ->appendStylesheet($this->basePath('assets/admin/styles/proton.css'))
+                ->appendStylesheet($this->basePath('assets/admin/styles/vendor/animate.css')) 
+                ->appendStylesheet($this->basePath('assets/admin/styles/font-awesome.css'))
+                ->appendStylesheet($this->basePath('assets/admin/styles/font-titillium.css'))
+                ->appendStylesheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')                       
+                ->appendStylesheet($this->basePath('css/admincustom.css'))
+        ?>
+						
+        <!-- adds CSS media query support to IE8   -->
+        <!--[if lt IE 9]>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+            <script src="scripts/vendor/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Common Scripts: -->
+        <script>
+        var FULL_URL_PATH = '<?php echo $this->basePath(); ?>';
+        (function () {
+          var js;
+          if (typeof JSON !== 'undefined' && 'querySelector' in document && 'addEventListener' in window) {
+            js = '//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js';
+          } else {
+            js = '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js';
+          }
+          document.write('<script src="' + js + '"><\/script>');
+        }());
+        </script>
+		
+        <?php echo $this->headScript()
+            ->prependFile($this->basePath('assets/admin/scripts/vendor/modernizr.js'))
+            ->prependFile($this->basePath('assets/admin/scripts/vendor/jquery.cookie.js'))            
+            ->prependFile($this->basePath('assets/admin/scripts/vendor/tinymce/tinymce.min.js'))
+            ->prependFile($this->basePath('js/respond.min.js'), 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',))
+        ; ?>
+            
+		</head>
+
+        <body class="dashboard-page">
+        <script>
+	        var theme = $.cookie('protonTheme') || 'default';
+	        $('body').removeClass (function (index, css) {
+	            return (css.match (/\btheme-\S+/g) || []).join(' ');
+	        });
+	        if (theme !== 'default') $('body').addClass(theme);
+			$(function () {
+            $(".addatvie").click(function (e) {
+                e.preventDefault();
+                $(".addatvie").removeClass("active");
+                $(this).addClass("active");
+            });
+        });
+        </script> 
+        <!--[if lt IE 8]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="//browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        
+		<?php echo $this->partial('layout/_sidebar'); ?>
+		
+        <nav class="user-menu"> <a href="javascript:;" class="main-menu-access"> <i class="icon-proton-logo"></i> <i class="icon-reorder"></i> </a> </nav>
+        <section class="wrapper">
+          <div class="row backwhi">
+            <div class="col-md-4">
+              <div><img src="<?php echo $this->basePath();?>/img/logo.png" alt="proton-logo" class="imgmargin" width="50"> <span class="fntlogo">Tapetickets</span> </div>
+            </div>
+            <div class="col-md-8">
+              <h5 class="usernmlgt">Welcome Admin <a href="<?php echo $this->url('adminlogout'); ?>" title="Logout"><i class="icon-off nav-icon"></i></a></h5>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <?php echo $this->content; ?>
+          </div>
+          
+        </section>
+        
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/bootstrap.min.js"></script> 
+
+        <!-- Proton base scripts: --> 
+
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/main.js"></script> 
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/proton/common.js"></script> 
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/proton/main-nav.js"></script> 
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/proton/user-nav.js"></script>                 
+
+        <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.min.js"></script>
+
+        <!-- Page-specific scripts: --> 
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <!--<script src="<?php echo $this->basePath();?>/assets/admin/scripts/proton/dashboard.js"></script>-->
+        <!--<script src="<?php echo $this->basePath();?>/assets/admin/scripts/proton/dashdemo.js"></script> -->
+
+        <!-- Bootstrap Tags Input --> 
+        <!-- //timschlechter.github.io/bootstrap-tagsinput/examples/ --> 
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/vendor/bootstrap-tagsinput.min.js"></script> 
+
+        <!-- Raphael, used for graphs --> 
+        <!-- //raphaeljs.com/ --> 
+        <!--<script src="<?php echo $this->basePath();?>/assets/admin/scripts/vendor/raphael-min.js"></script> -->
+
+        <!-- Morris graphs --> 
+        <!-- //github.com/oesmith/morris.js --> 
+        <!--<script src="<?php echo $this->basePath();?>/assets/admin/scripts/vendor/morris.min.js"></script>-->
+
+        <!-- Select2 For Bootstrap3 --> 
+        <!-- //github.com/fk/select2-bootstrap-css --> 
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/vendor/select2.min.js"></script> 
+        
+        
+        <!-- Number formating for dashboard demo --> 
+        <script src="<?php echo $this->basePath();?>/assets/admin/scripts/vendor/numeral.min.js"></script> 
+        
+        <!-- Notifications --> 
+        <!-- //pinesframework.org/pnotify/ --> 
+        <!--<script src="<?php echo $this->basePath();?>/assets/admin/scripts/vendor/jquery.pnotify.min.js"></script>-->
+		
+		<?php echo $this->inlineScript(); ?>
+</body>    
+</html>

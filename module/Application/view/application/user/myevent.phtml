@@ -1,0 +1,100 @@
+<?php
+$totalfutureevents = count($this->future_events);
+
+$totalaatendedevents = count($this->booked_events);
+?>
+<h2 class="heading42"><span><?php echo $this->name; ?></span></h2>
+<div role="tabpanel"> 
+    
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="<?php echo $this->url('my-event') ?>">My Events</a></li>
+        <li role="presentation"><a href="<?php echo $this->url('order-history') ?>">Order History</a></li>
+        <!--<li role="presentation"><a href="<?php echo $this->url('payment-details') ?>">Payment Details</a></li>-->
+        <li role="presentation"><a href="<?php echo $this->url('userprofile') ?>">Settings</a></li>
+    </ul>
+    
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="my-events">
+        <div class="events-list">
+          <h3>upcoming events   ( <?php echo $totalfutureevents; ?> )</h3>
+          <ul>
+              <?php 
+              
+              foreach($this->future_events as $event){  ?>
+                  
+              <li> <img src="<?php echo $event['event_icon'] ?>" alt="">
+                      <div class="row overlay-content">
+                          <div class="col-md-3 col-sm-4">
+                              <div class="media">
+                                  <div class="media-body"> <span class="date-time"><i class="fa fa-calendar-o"></i></span> <?php echo $event['event_date']->format('M d, Y'); ?></div>
+                                  <div class="media-body"> <span class="date-time"><i class="fa fa-clock-o"></i></span> <?php echo $event['event_date']->format('h:i A'); ?> </div>
+                              </div>
+                              <!--/media--> 
+
+                          </div>    
+                          <div class="col-md-6 col-sm-4">
+                              <h4><a target="_blank" href="<?php echo $this->url('eventdetail',array( 'eventId'=> $event['event_id']))?>"><?php echo $event['event_name']?></a><span><?php echo $event['event_venue'] ?></span></h4>
+                          </div>
+                          <div class="col-md-3 col-sm-4">
+                              <?php
+                              if($event['tickets']>1){  
+                                $labelticket = "tickets";  
+                              }else{
+                                $labelticket = "ticket";  
+                              }
+                              ?>
+                              <div class="ticket-bought"> <span class="event-no"><?php echo $event['tickets']; ?> </span>
+                                  <h5><?php echo $labelticket; ?> bought</h5>
+                                  <a href="<?php echo $this->url('ticketpreview',array('bookingid'=>$event['id'])) ?>">view your tickets</a> <span class="pull-right"><img src="<?php echo $event['event_cat_icon'] ?>" width="20" height="20" /></span> </div>
+                              <!--/ticket-bought--> 
+                          </div>
+                      </div>
+                  </li>
+              
+              
+              <?php
+              }
+              ?>            
+          </ul>
+        </div>
+        <div class="events-list events-attended">
+          <h3>events attended   ( <?php echo $totalaatendedevents; ?> )</h3>
+          <ul>
+              <?php foreach($this->booked_events as $event){ ?>
+            <li> <img src="<?php echo $event['event_icon'] ?>" alt="">
+              <div class="row overlay-content">
+                <div class="col-md-3 col-sm-4">
+                  <div class="media">
+                    <div class="media-body"> <span class="date-time"><i class="fa fa-calendar-o"></i></span> <?php echo $event['event_date']->format('M d, Y'); ?> </div>
+                    <div class="media-body"> <span class="date-time"><i class="fa fa-clock-o"></i></span> <?php echo $event['event_date']->format('h:i A'); ?>  </div>
+                  </div>
+                  <!--/media--> 
+                  
+                </div>
+                <div class="col-md-6 col-sm-4">
+                  <h4><?php echo $event['event_name']?><span><?php echo $event['event_venue'] ?></span></h4>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <?php
+                        if($event['tickets']>1){  
+                          $labelticket = "tickets";  
+                        }else{
+                          $labelticket = "ticket";  
+                        }
+                    ?>
+                  <div class="ticket-bought"> <span class="event-no"><?php echo $event['tickets']; ?></span>
+                    <h5><?php echo $labelticket; ?> bought</h5>
+                    <a href="<?php echo $this->url('ticketpreview',array('bookingid'=>$event['id'])) ?>">view your tickets</a> <span class="pull-right"><img src="<?php echo $event['event_cat_icon'] ?>" width="20" height="20" /></span> </div>
+                  <!--/ticket-bought--> 
+                </div>
+              </div>
+            </li>
+              <?php } ?>
+          </ul>
+        </div>
+      </div>
+    </div>
+</div>
+      

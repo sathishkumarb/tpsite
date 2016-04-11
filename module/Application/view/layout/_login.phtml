@@ -1,0 +1,198 @@
+<div id="fb-root"></div>
+<script>window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '457610574437545',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.3'
+    });
+FB.Event.subscribe('auth.login', function(resp) {
+        window.location = '//www.tapetickets.com/public/';
+    });
+    // ADD ADDITIONAL FACEBOOK CODE HERE
+  };
+
+  (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+<div class="modal fade login-signup" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center" id="myModalLabel">Login</h4>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-danger fade in" style="display:none;"></div>
+        <?php
+        $form->setAttribute('action', '');
+        $form->prepare();
+            echo $this->form()->openTag($form);
+        ?>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="input-group"> <em class="icons icon-email"></em>
+                <?php echo $this->formRow($form->get('email')); ?>
+              </div>
+              <!--/input-group--> 
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="input-group"> <em class="icons icon-password"></em>
+                <?php echo $this->formRow($form->get('password')); ?>
+              </div>
+            </div>
+          </div>
+          <div class="form-group text-center">
+            <?php echo $this->formRow($form->get('signin')); ?>
+            <p>
+            	<a href="#" data-target="#forgotpassword" data-toggle="modal" data-dismiss="modal">Forgot your password?</a> | 
+                <a href="#" data-target="#signup" data-toggle="modal" data-dismiss="modal">New User? Register</a>
+            </p>
+          </div>
+        <!--/form-->
+        <?php echo $this->form()->closeTag(); ?>
+        <div class="or-section"> <span>or</span></div>
+        <p class="text-center">
+            <a href="javascript:void(0);" onclick="Login();">Connect with Facebook</a>
+            </p>
+
+        <script type="text/javascript">
+      /*    
+        function checkLoginState() {
+            // This function is called when someone finishes with the Login
+            // Button.
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
+		/*
+        function statusChangeCallback(response) {
+            console.log('statusChangeCallback');
+            console.log(response);
+            // The response object is returned with a status field that lets the
+            // app know the current login status of the person.
+            // Full docs on the response object can be found in the documentation
+            // for FB.getLoginStatus().
+            if (response.status === 'connected') {
+              // Logged into your app and Facebook.
+				var uid = response.authResponse.userID;
+                var accessToken = response.authResponse.accessToken;
+              testAPI();
+            } else if (response.status === 'not_authorized') {
+              // The person is logged into Facebook, but not your app.
+              //document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
+              alert('Please log into this app.');
+            } else {
+              // The person is not logged into Facebook, so we're not sure if
+              // they are logged into this app or not.
+              /* document.getElementById('status').innerHTML = 'Please log ' +
+                'into Facebook.';*/
+               // alert('Please log into Facebook');
+       /*     }
+        }*/
+       /* function Login() {
+		  FB.login(function (response) {
+			if (response.authResponse) {
+			  FB.api('/me', function (response) {
+			  
+            console.log('Successful login for: ' + response.name);
+            console.log('Successful login for: ' + response.email);
+            console.log('Successful login for: ' + response.id);
+			
+				var ajaxRequest = new XMLHttpRequest();
+				ajaxRequest.onreadystatechange = function() {
+					if(ajaxRequest.readyState === 4) {
+						console.log(ajaxRequest.responseText);
+					}
+				};
+				//send with POST
+				ajaxRequest.open('POST',FULL_URL_PATH+'index/connect',true);
+				ajaxRequest.setRequestHeader('Content-type','application/x-www-form-urlencoded'); //like a form
+				ajaxRequest.send('name='+response.name+'&email='+response.email+'&id='+response.id);
+				
+				// FB.api('/me/picture?type=normal', function (response) {
+				  // document.getElementById("profileImage").setAttribute("src", response.data.url);
+				// });
+			  });
+			} else {
+			  alert("Login attempt failed!");
+			}
+		  }, { scope: 'email' });
+		} */
+        // Here we run a very simple test of the Graph API after login is
+        // successful.  See statusChangeCallback() for when this call is made.
+       /* function testAPI() {
+          console.log('Welcome!  Fetching your information.... ');
+          FB.api('/me', function(response) {
+            console.log('Successful login for: ' + response.name);
+            
+          });
+        }
+         */ 
+        $( document ).ready(function() {
+       loginvalidator = $("#userlogin").validate({
+                       // errorClass:'error-msg',
+                        rules: {				
+                                email: { 
+                                    required: true,
+                                    email: true,
+                                    htmltags:true,
+                                    maxlength:60
+                                    //htmltags:true,
+                                    //checkuniqueemail:true
+                                },
+                                password:{ 
+                                    required: true,
+                                    htmltags:true
+                                },
+                        },
+                        messages: {           
+                                'email' : {
+                                    required: "Please enter e-mail",
+                                    email: "Please enter valid e-mail"	,
+                                    htmltags: "HTML tags not allowed",
+                                    maxlength: "Email cannot exceed 60 Characters"
+                                    //htmltags: "HTML tags not allowed",
+                                    //checkuniqueemail: "Email already exist"
+                                 },
+                                password:   {
+                                    required: "Please enter password",
+                                    htmltags: "HTML tags not allowed"
+                                }            
+                        },
+                        submitHandler: function(form) {
+                                //form.submit();                                                                
+                            $("#login .alert-danger").hide();
+                            var formData = $("#userlogin").serialize();                                    
+                            $.post('<?php echo $this->action;?>', formData, function(response){
+                                var obj = jQuery.parseJSON( response );
+                                var status = obj.status;
+                                var msg = obj.msg;                                        
+                                if(status == 1){
+                                    window.location = '<?php echo $this->url('userprofile') ?>';
+                                }else if(status == 2){
+                                    window.location = obj.reffererUrl;
+                                }else{
+                                    $("#login .alert-danger").html(msg);
+                                    $("#login .alert-danger").show();
+                                }
+                            });
+                        }
+                });        
+               $.validator.addMethod("htmltags", checkHTMLTags); 
+        });        
+        
+        </script>
+      </div>
+      <!--/modal-body--> 
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<nav class="navbar navbar-static-top">
+    <div class="container">
+      <div class="navbar-header navbar-default">
+        <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+        <a href="<?php echo $this->url('home',array(),array('force_canonical'=>true)); ?>" class="navbar-brand" title="tabe tickets"><img src="<?php echo $this->basePath('/assets/frontend/images/newlogo.svg');?>" alt="tabe tickets"></a> </div>
+      <div class="navbar-collapse collapse" id="navbar">
+        <ul class="nav navbar-nav">
+          <li class="dropdown"> 
+           <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><?php if($this->active_city != ""){ echo $this->active_city; }else { ?>Dubai,UAE <?php } ?> <span class="caret"></span></a>
+            <ul role="menu" class="dropdown-menu">
+              <?php foreach($cities as $city): ?>
+                <li><a href="<?php echo $this->url('eventsearch',array('type'=>'city','searchval'=>$city->getId())); ?>"><?php echo $city->getCityName(); ?></a></li>
+              <?php endforeach; ?>
+            </ul>
+          </li>
+          <li class="dropdown"> <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><?php if($this->active_category != ""){ echo $this->active_category; }else { ?>Category <?php } ?><span class="caret"></span></a>
+            <ul role="menu" class="dropdown-menu">
+              <?php foreach($categories as $category): ?>
+                <li><a href="<?php echo $this->url('eventsearch',array('type'=>'category','searchval'=>$category->getId())); ?>"><?php echo $category->getCategoryName(); ?></a></li>
+              <?php endforeach; ?>
+            </ul>
+          </li>
+        </ul>
+         <div id="multipledataset" class="navbar-form navbar-left">
+          <input id="typeaheadtext" type="text" class="typeahead form-control" data-provide="typeahead" placeholder="Search event, artist, game or venue...." />          
+          </div>
+          <a href="javascript:void(0);" class="settings-link" data-toggle="dropdown" id="dLabel"></a>
+
+                <ul class="dropdown-menu settings_dropdown" role="menu" aria-labelledby="dLabel">
+
+                 <li><a href=" /settings"> Account Settings </a></li>                   
+
+     <li><a href="javascript:void(0);"> Help &amp; Support </a></li>
+     <li><a href=" /invite"> Invite </a></li>
+
+                    <li><a href="#"> Log Out </a></li>
+
+               </ul>
+        <!--`<form class="navbar-form navbar-left" role="search">
+          <div class="form-group dropdown">
+            <input tabindex="0" type="text" class="form-control dropdown-toggle" placeholder="Search event, artist, game or venue...."   data-toggle="dropdown" >
+            <div role="menu" class="dropdown-menu">
+              <h5>See all results</h5>
+              <div class="all-results">
+                <label>Events</label>
+                <ul>
+                  <li><a href="#">Robbie Williams - Let me entertain you</a></li>
+                </ul>
+              </div>
+              <div class="all-results">
+                <label>artists</label>
+                <ul>
+                  <li><a href="#">Robbie Williams</a></li>
+                  <li><a href="#">Robbie Fulks</a></li>
+                  <li><a href="#">Robyn</a></li>
+                </ul>
+              </div>              
+              <div class="all-results">
+                <label>venues</label>
+                <ul>
+                  <li><a href="#">Robinson Palace</a></li>
+                </ul>
+              </div>              
+            </div>
+          </div>          
+        </form>
+        -->
+        <ul class="nav navbar-nav navbar-right">
+            <?php if(empty($userId)){ ?>
+            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#login">Log In</a></li>
+             <li> <a id="btnSignUpPop" href="javascript:void(0)" data-toggle="modal" data-target="#signup"><img src="<?php echo $this->basePath() ?>/assets/frontend/images/signupbutton.svg" /></a> </li>
+            <?php }else{ ?>
+            <li class="user-login"><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <?php echo $username; ?> <span class="caret"></span></a>
+                <ul role="menu" class="dropdown-menu">                    
+                    <li><a href="<?php echo $this->url('userprofile'); ?>" class="profile">Profile</a></li>
+                    <li><a href="javascript:void(0)" class="signout" data-toggle="modal">Sign Out</a></li>                    
+                </ul> </li>               
+                <!--<li> <a href="javascript:void(0)" class="btn btn-info signout" data-toggle="modal">Sign Out</a> </li> -->
+            <?php } ?>
+        </ul>
+      </div>
+    </div>
+  </nav>

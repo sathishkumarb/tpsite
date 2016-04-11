@@ -1,0 +1,77 @@
+<h5>Basic Information</h5>
+<?php
+$form = $this->form;
+$form->setAttribute('action', '');
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('firstname')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('lastname')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('email')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('contactno')); ?>
+    </div>
+    <?php echo $this->formRow($form->get('savebtn')); ?>
+    <?php echo $this->form()->closeTag(); ?>
+<script>
+       $( document ).ready(function() {	
+	$("#userbasicinfo").validate({
+		errorClass:'validation-error',
+		rules: {				
+			firstname:{ maxlength:30,htmltags:true },
+			lastname:{ maxlength:30,htmltags:true },
+			contactno: { minlength: 10, maxlength: 14, number:true },
+		},
+                messages: {
+                        firstname:{                             
+                                maxlength : "First Name cannot exceed 30 Characters",
+				htmltags: "HTML Tags not supported"
+			},  
+			'lastname':{
+                                maxlength : "First Name cannot exceed 30 Characters",
+				htmltags: "HTML Tags not supported"
+                       },
+			contactno:{ 				                            
+                                number: 'Only digits are allowed',
+				minlength: 'Phone number should be atleast 10 digits',
+				maxlength: 'Phone number should not exceed 14 didgits'					
+			}        
+                },
+		submitHandler: function(form) {
+			$("#userinfo .alert-danger").hide();
+                        var formData = $("#userbasicinfo").serialize();                                                   
+                        $.post('<?php echo $this->action;?>', formData, function(response){
+                            var obj = jQuery.parseJSON( response );
+                            var status = obj.status;
+                            var msg = obj.msg;                                  
+                            if(status == 1){
+                                $("#userinfo .alert-error").hide();
+                                $("#userinfo .alert-success").show();
+                                $("#userinfo .alert-success").html(msg);                           
+                                setTimeout(function() {                                    
+                                    $("#userinfo .alert-success").hide()
+                                }, 2500);
+                    
+                            }else if(status == -1){                               
+                                alert(msg);
+                                //window.location = '<?php echo $this->url('home') ?>';
+                            }else{
+                                $("#userinfo .alert-error").html(msg);
+                                $("#userinfo .alert-error").show();                                
+                                $("#userinfo .alert-success").hide();                                    
+                                setTimeout(function() {
+                                    $("#userinfo .alert-error").hide('blind', {}, 500)
+                                }, 5000);
+                            }
+                        });
+		}                
+	});
+        $.validator.addMethod("htmltags", checkHTMLTags);
+});      
+</script>

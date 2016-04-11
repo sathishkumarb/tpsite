@@ -1,0 +1,179 @@
+<div class="row">
+    <div class="col-md-12 pad12">
+
+        <div class="panel panel-default panel-block">
+            <div class="list-group">
+                <div class="se-pre-con"></div>
+                <div class="list-group-item" id="masked-input-fields">
+                    <h4 class="section-title">Edit User</h4>
+                    <?php echo $this->flashMessenger()->render('success', array('alert alert-success')); ?>
+                    <?php if (!empty($success)) { ?>
+                        <div class="alert alert-success fade in"><?php echo $success; ?></div>
+                    <?php } ?>
+                    <?php if (!empty($error)) { ?>
+                        <div class="alert alert-danger fade in"><?php echo $error; ?></div>
+                    <?php } ?>
+                    <?php
+                    $form->setAttribute('action', $this->url('useredit', array('userId' => $userId)));
+                    $form->setAttribute('class', "form-horizontal");
+                    $form->prepare();
+                    echo $this->form()->openTag($form);
+                    ?>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="firstName">
+                            First Name
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('firstname')); ?>
+                        </div>
+                    </div>                                                
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="lastName">
+                            Last Name
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('lastname')); ?>
+                        </div>
+                    </div>                                                
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="phone">
+                            Phone
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('phone')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="roles" class="col-lg-4 control-label">
+                            Roles
+                        </label>
+                        <div class="col-lg-8">
+                            <?php echo $this->formRow($form->get('roles')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="country" class="col-lg-4 control-label">
+                            Country
+                        </label>
+                        <div class="col-lg-8">
+                            <?php echo $this->formRow($form->get('country')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="city" class="col-lg-4 control-label">
+                            City
+                        </label>
+                        <div class="col-lg-8">
+                            <?php echo $this->formRow($form->get('city')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="zip" class="col-lg-4 control-label">
+                            ZIP
+                        </label>
+                        <div class="col-lg-8">
+                            <?php echo $this->formRow($form->get('zip')); ?>
+                        </div>
+                    </div>
+                    <div class="btnaddriv">
+                        <div class="row show-grid">
+                            <div class="col-xs-6"><?php echo $this->formRow($form->get('submitbutton')); ?></div>
+                            <div class="col-xs-6"><button class="btn btn-default saveaddriv unpaistridt" type="button" onclick="window.location = '<?php echo $this->url('categoryindex') ?>';">Cancel</button></div>
+                        </div>
+                    </div>
+
+                    <?php echo $this->form()->closeTag(); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/jquery.validate.js');
+?>
+<script>
+    $(document).ready(function () {
+        $("#edituser").validate({
+            errorClass: 'validation-error',
+            rules: {
+                firstname: {
+                    htmltags: true,
+                    required: true,
+                    maxlength: 50,
+                },
+                lastname: {
+                    htmltags: true,
+                    maxlength: 50,
+                },
+                phone: {
+                    number: true,
+                    maxlength: 14
+                },
+                country: {
+                    number: true
+                },
+                city: {
+                    number: true
+                },
+                zip: {
+                    number: true,
+                    minlength: 5,
+                    maxlength: 6
+                }
+            },
+            messages: {
+                firstname: {
+                    htmltags: 'HTML tags not allowed',
+                    maxlength: 'First Name should not exceed 50 characters.'
+                },
+                lastname: {
+                    htmltags: 'HTML tags not allowed',
+                    maxlength: 'Last Name should not exceed 50 characters.'
+                },
+                phone: {
+                    minlength: "Phone number should be atleast 10 digit",
+                    maxlength: "Phone number should not exceed 14 digit",
+                    number: "Please check Phone number. Only digits are allowed"
+                },
+                country: {
+                    number: "Select Valid Country"
+                },
+                city: {
+                    number: "Select Valid City"
+                },
+                zip: {
+                    number: "Enter Valid ZIP Code. Only Numbers allowed",
+                    minlength: "ZIP should be atleast 5 digits",
+                    maxlength: "ZIP should not exceed 6 digit"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+        /**
+         * This function check html tags in field value
+         * @Author Vinod Kandwal
+         */
+        jQuery.validator.addMethod("htmltags", function checkHTMLTags(value, element, params) {
+            if (value.match(/([\<])([^\>]{1,})*([\>])/i) == null) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    });
+    function getCity(countryid) {
+        $(".se-pre-con").show();
+        var fetch_city_url = "<?php echo $this->url('admingetcity'); ?>" + countryid;
+        $.ajax({
+            url: fetch_city_url
+        })
+                .done(function (data) {
+                    $('#city').html(data);
+                    $(".se-pre-con").hide();
+                });
+    }
+</script>

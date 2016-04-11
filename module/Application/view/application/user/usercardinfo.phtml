@@ -1,0 +1,92 @@
+<div style="display:none" class="newcardform">
+<?php
+$form = $this->form;
+$form->setAttribute('action', '');
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+    <div class="form-group">
+      <?php echo html_entity_decode($this->formRow($form->get('card_type'))); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('cardno')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('title')); ?>
+    </div>    
+    <div class="form-group">
+        <div class="row">                    
+            <div class="col-md-12">
+                <div class="media">
+                    <div class="media-left"> EXP. </div>
+                    <div class="media-body exp-date">
+                        <span><?php echo $this->formRow($form->get('month')); ?></span>
+                        <span><?php echo $this->formRow($form->get('year')); ?></span>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>    
+    <?php echo $this->formRow($form->get('savebtn')); ?>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+<script>
+       $( document ).ready(function() {	
+	$("#usercardinfo").validate({
+		errorClass:'validation-error',
+		rules: {				
+			card_type:{required:true },
+			cardno:{ maxlength:16,required:true},			
+                        title:{required: true,htmltags:true },
+                        month:{required:true},
+                        year:{required:true}        
+		},
+                messages: {
+                        card_type:{                                                             
+                                required: "Please select card type"
+			},  
+			cardno:{
+                                maxlength : "Card Number cannot exceed 16 Characters",
+				htmltags: "HTML Tags not supported",
+                                required: "Please enter card number"
+                       },
+                       title:{                                
+				htmltags: "HTML tags not supported",
+                                required: "Please enter unique title for your saved card"
+                       },
+                       month:{
+                                required: "Please select expiry month of card"
+                       },
+                       year:{
+                                required: "Please select expiry year of card"
+                       }
+                },
+		submitHandler: function(form) {
+			$("#usercardinfo .alert-danger").hide();
+                        var formData = $("#usercardinfo").serialize();                                                   
+                        $.post('<?php echo $this->action;?>', formData, function(response){
+                            var obj = jQuery.parseJSON( response );
+                            var status = obj.status;
+                            var msg = obj.msg;                                  
+                            if(status == 1){
+                                $(".cardform .alert-error").hide();
+                                $(".cardform .alert-success").show();
+                                $(".cardform .alert-success").html(msg);                           
+                                $('#usercardinfo').find("input[type=text],input[type=radio],input[type=radio],textarea").val("");
+                                $( ".newcardform" ).slideUp( "slow");
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 2000);
+                            }else if(status == -1){                                                               
+                                window.location = '<?php echo $this->url('home') ?>';
+                            }else{
+                                $(".cardform .alert-error").html(msg);
+                                $(".cardform .alert-error").show();
+                                $(".cardform .alert-success").hide();                                    
+                            }
+                        });
+		}                
+	});
+        $.validator.addMethod("htmltags", checkHTMLTags);  
+});      
+</script>

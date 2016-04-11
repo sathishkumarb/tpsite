@@ -1,0 +1,105 @@
+
+<div class="modal fade login-signup" id="forgotpassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center" id="myModalLabel">Forgot Password</h4>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-danger fade in" style="display:none;"></div>
+          <div class="alert alert-success fade in" style="display:none;"></div> 
+        <?php
+            //$form->setAttribute('action', "");
+            //$form->prepare();
+        $form->setAttribute('action', '');
+        $form->prepare();
+        echo $this->form()->openTag($form);
+        ?>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="input-group"> <em class="icons icon-email"></em>
+                <?php echo $this->formRow($form->get('emailaddr')); ?>
+              </div>
+              <!--/input-group--> 
+            </div>
+          </div>          
+          <div class="form-group text-center">
+            <?php echo $this->formRow($form->get('forgotsubmit')); ?>
+            <p>Already a member? <a href="#"  data-target="#login" data-toggle="modal" data-dismiss="modal">Log In</a></p>
+          </div>
+        <!--/form-->
+        <?php echo $this->form()->closeTag(); ?> 
+
+        <script type="text/javascript">
+     
+        $( document ).ready(function() {
+           /* $('#forgotsubmit').click(function(e){                 
+                e.preventDefault();
+                $("#forgotpass .alert-danger").hide();
+                $("#forgotpass .alert-danger").html();
+                $("#forgotpass .alert-success").hide();
+                $("#forgotpass .alert-success").html();
+                var formData1 = $("#forgotpass").serialize();
+                console.log(formData1);
+                $.post('<?php echo $this->action;?>', formData1, function(response){
+                    var obj1 = jQuery.parseJSON( response );
+                    var status1 = obj1.status;
+                    var msg1 = obj1.msg;                                        
+                    if(status1 == 1){
+                        $("#login .alert-danger").hide();
+                        $("#login .alert-success").html(msg1);
+                        $("#login .alert-success").show();
+                    }else{                                            
+                        $("#login .alert-success").hide();
+                        $("#login .alert-danger").html(msg1);
+                        $("#login .alert-danger").show();
+                    }
+                });
+            });         */
+              
+			var forgotvalidator = $("#forgotpass").validate({                       
+                        rules: {				
+                                emailaddr: { 
+                                    required: true, 
+                                    email: true
+                                },                                
+                        },
+                        messages: {           
+                                'emailaddr' : {
+                                    required: "Please enter e-mail",                                    
+                                    email: "Please enter valid email address"
+                                 },           
+                        },
+                        submitHandler: function(form) {
+                                //form.submit();                                                                
+                                $("#forgotpass .alert-danger").hide();
+                                $("#forgotpass .alert-danger").html();
+                                $("#forgotpass .alert-success").hide();
+                                $("#forgotpass .alert-success").html();
+                                var formData1 = $("#forgotpass").serialize();                                    
+                                $.post('<?php echo $this->action;?>', formData1, function(response){
+                                    var obj1 = jQuery.parseJSON( response );
+                                    var status1 = obj1.status;
+                                    var msg1 = obj1.msg;                                                                            
+                                    if(status1 == 1){
+                                        $("#forgotpassword .alert-danger").hide();
+                                        $("#forgotpassword .alert-success").html(msg1);
+                                        $("#forgotpassword .alert-success").show();
+                                    }else{                                            
+                                        $("#forgotpassword .alert-success").hide();
+                                        $("#forgotpassword .alert-danger").html(msg1);
+                                        $("#forgotpassword .alert-danger").show();
+                                    }
+                                });
+                        }
+                });
+		});
+        
+        </script>
+      </div>
+      <!--/modal-body--> 
+      
+    </div>
+  </div>
+</div>

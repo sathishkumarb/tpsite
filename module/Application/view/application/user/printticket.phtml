@@ -1,0 +1,135 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath() ?>/assets/frontend/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath() ?>/assets/frontend/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath() ?>/assets/frontend/css/theme-style.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath() ?>/assets/frontend/css/custom-style.css">
+<style type="text/css">
+	.ticket-preview li li span{ font-size:14px;}
+	.ticket-preview li .ticket-details, .ticket-preview li .ticket-order{ width:100%;}
+	.ticket-preview li .ticket-order img:first-child{ margin-right:-10px;}
+	.ticket-preview li .heading42{ padding-bottom:20px; margin-top:0;}
+	
+	
+	
+.ticket-preview li .ticket-details{ border:none;}	
+.ticket-preview tr{border-bottom: 1px solid #f5f5f5;}	
+.ticket-preview td h4 span{ padding-left:0;}
+.ticket-preview td.border{border-left:2px dotted #f5f5f5;}
+table{ line-height:22px;}
+.ticket-preview li .ticket-order table{ margin:50px 0 25px;}
+.ticket-preview li li{border:none;  border-bottom:#f5f5f5 solid 2px;padding:0;border-radius:0; margin-bottom:10px; width:100%;}
+.ticket-preview li td label{color:#b2b2b2; font-size:12px;font-family: 'Varela Round', sans-serif; font-weight:400; display:block; margin-bottom:0;}
+.ticket-preview td span{ background:url(../images/img-border-left.png) no-repeat left bottom; padding-left:14px; font-weight:700; font-size:14px;}
+
+
+	
+	.ticket-preview li .heading42{ padding-bottom:20px; margin-top:0;}
+	.ticket-preview li .ticket-order{ padding-top:20px;}
+	.ticket-preview li .ticket-details{ padding-top:10px;}
+	.ticket-preview li li{ padding-bottom:3px;}
+	.ticket-preview li{  margin-top:90px;}
+	.ticket-preview li .ticket-order{ padding:40px 0 50px 46px;}
+	
+</style>
+        
+<div class="container main"> 
+    <div class="row">
+        <div class="col-md-8">
+            <div class="ticket-preview">        
+               
+                <ul>
+                    <?php for($i=1;$i<=count($this->seatobj);$i++){ ?>
+                    <li>
+                         <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                        <td>
+                        <div class="ticket-details">
+                            <h4 class="heading42"><?php echo $this->eventobj['event_artist'] ?><span><?php echo $this->eventobj['event_name'] ?></span></h4>
+                            
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            	<tr>
+                                	<td><label>Date</label>
+                                    <span><?php echo $this->bookingobj['event_date']->format('d M Y'); ?></span></td>
+                                    <td><label>Time</label>
+                                    <span><?php echo $this->bookingobj['event_time']->format('h:i A'); ?></span></td>
+                                </tr>
+                           
+                            
+                            
+                           
+                                
+
+                             <tr>
+                                	<td>
+
+                                    <label>Location</label>
+                                    <span><?php echo $this->eventobj['event_venue']; ?></span></td>
+                               <td>
+
+                                    <label>Seat</label>
+                                    <span><?php echo $this->seatobj[$i]['seatno'] ?></span></td>
+</tr>
+
+                                   <tr>
+                                	<td>
+
+                                    <label>Entrance</label>
+                                    <span><?php echo $this->seatobj[$i]['entrance'] ?></span></td>
+                                <td>
+
+                                    <label>Ticket Type</label>
+                                    <span><?php echo $this->seatobj[$i]['ticket_type'] ?></span></td>
+                                    </tr>
+                               <tr>
+<td>
+                                    <label>Redeem on</label>
+                                    <span><?php echo $this->seatobj[$i]['redeem_on'] ?></span></td>
+                                <td>
+
+                                    <label>Price</label>
+                                    <span><?php echo $this->bookingobj['total_price'] ?> AED</span></td></tr>                                                              
+                           </table>
+
+                        </div>
+                        </td>
+                        
+                        
+                        <td class="border">
+                        <div class="ticket-order">
+                            <img width="85" src="<?php echo $this->basePath() ?>/assets/frontend/classes/qr-code/php/qr_img.php?d=<?php echo $this->seatobj[$i]['seatid']; ?>" class="pull-right <?php echo $this->seatobj[$i]['seatid']; ?>" />
+                            <!--<img src="images/img-qr.png" alt="" class="pull-right">-->
+                            <div class="clearfix"></div>
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                        <td> <label>Date of order</label>
+                                    <span><?php echo $this->seatobj[$i]['order_date']->format('d M Y') ?></span></td></tr>
+                        
+                         <tr>
+                        <td><label>Price</label>
+                                    <span><?php echo $this->seatobj[$i]['price_single']; ?> AED</span></td></tr>
+                        </table>
+                            
+                            
+                            
+                           
+                            <img src="<?php echo $this->basePath() ?>/assets/frontend/images/img-logo-thumb.png" alt="" class="pull-right">
+                        </div><!--/ticket-order-->
+                   </td>
+                     </tr>
+</table> </li>
+                <?php } ?>
+                </ul>
+                   
+            </div><!--/ticket-preview-->
+        </div>        
+    </div><!--/row-->
+</div>
+        <script>
+        jQuery(document).ready(function(e){
+           window.print(); 
+        });
+        </script>

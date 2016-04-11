@@ -1,0 +1,504 @@
+form#imageUploader {
+    /*display: none;*/
+}
+div.selected {
+    background: rgba(212,0,0,0.5);
+}
+span#drawToolArrow {
+    width: 120px;
+    height: 30px;
+    background: #e8ebf2;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    border-radius: 0px 0px 10px 0px;
+    cursor: pointer;
+    text-align: center;
+}
+
+div#draw-tools .form-group.form-group-sm {
+    width: 300px;
+    margin: 0;
+}
+div#draw-tools .form-group.form-group-sm button {
+    float: left;
+    width: initial;
+    margin: 0 2px;
+    padding: 5px 10px;
+}
+#drawToolArrow > span.glyphicon, #drawShapesArrow > span.glyphicon {
+    line-height: 30px;
+    width: 15px;
+    position: absolute;
+}
+#drawToolArrow > span.title, #drawShapesArrow > span.title {
+    line-height: 30px;
+}
+#drawToolArrow > span.glyphicon {
+    right: 5px;
+}
+#drawShapesArrow > span.glyphicon {
+    left: 5px;
+}
+span#drawShapesArrow {
+    display: none;
+    width: 120px;
+    height: 30px;
+    background: #e8ebf2;
+    position: absolute;
+    top: 100px;
+    right: 0;
+    border-radius: 0px 0px 0px 10px;
+    cursor: pointer;
+    text-align: center;
+}
+div#zoneMaps {
+    overflow-x: auto;
+    height: 51px;
+    float: left;
+    width: initial;
+    overflow-y: auto;
+    max-width: 900px;
+}
+div#draw-shapes .form-group.form-group-sm {
+    margin-top: 10px;
+    float: left;
+    width: 200px;
+}
+
+div#draw-shapes div#deleteDiv {
+    float: left;
+    width: 200px;
+    margin-top: 10px;
+}
+
+#draw-shapes label#mapZone {
+    float: left;
+    width: 200px;
+    margin-top: 15px;
+}
+
+div#zoneMaps div.btn-group.btn-block {
+    width: initial;
+    float: left;
+    margin-top: 0px;
+    margin-right: 2px;
+}
+
+#upload-wrapper {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 50px;
+    padding: 50px
+}
+#upload-wrapper h3 {
+    padding: 0 0 10px;
+    margin: -30px 0 20px;
+    border-bottom: 1px solid #000
+}
+#upload-wrapper input[type=file] {
+    padding: 6px;
+    background: #FFF;
+    border-radius: 5px;
+    color: #333
+}
+#upload-wrapper #submit-btn {
+    border: none;
+    padding: 10px;
+    background: #61BAE4;
+    border-radius: 5px;
+    color: #FFF
+}
+#output {
+    padding: 5px;
+    font-size: 12px
+}
+#progressbox {
+    border: 1px solid #CAF2FF;
+    padding: 1px;
+    position: relative;
+    width: 400px;
+    border-radius: 3px;
+    margin: 10px;
+    display: none;
+    text-align: left
+}
+#progressbar {
+    height: 20px;
+    border-radius: 3px;
+    background-color: #CAF2FF;
+    width: 1%
+}
+#statustxt {
+    top: 3px;
+    left: 50%;
+    position: absolute;
+    display: inline-block;
+    color: #FFF
+}
+.mainModalOverlay,
+.modalOverlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 9999;
+    left: 0
+}
+#draw-shapes label,
+#draw-tools label,
+.center,
+ul.shapes {
+    color: #000
+}
+.mapping {
+    /*cursor: crosshair;*/
+    background-repeat: no-repeat
+}
+
+#zoneMaps div[id^="map_area"] > label {
+    padding: 0 5px;
+}
+
+.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se {
+    width: 10%;
+    height: 10%;
+}
+
+.area,
+.shapes li {
+    cursor: pointer
+}
+.event-uploader {
+    padding-top: 70px
+}
+.alert {
+    min-height: 50px;
+    display: none
+}
+.mainModalOverlay {
+    display: none;
+    background-color: rgba(61, 145, 162, .9);
+    overflow: auto;
+}
+.modalOverlay {
+    color: #000;
+    display: none;
+    background-color: rgba(0, 0, 0, .3)
+}
+.outer {
+    height: 100vh;
+    overflow-y: scroll;
+    position: relative;
+    width: 80%
+}
+.center {
+    padding: 10px;
+    width: 60%;
+    background: #fff;
+    margin: 10% auto;
+}
+.uploadEventMap button {
+    display: inline;
+    margin: auto
+}
+#drawCanvas,
+.noClose .ui-dialog-titlebar-close,
+.ui-dialog .btnDisabled {
+    display: none
+}
+input.whiteLable {
+    text-align: center;
+    width: 100%
+}
+#draw-shapes {
+    left: 0;
+    background: #e8ebf2;
+    box-shadow: 3px 0 10px -5px #000;
+    min-height: 50px;
+    padding: 0 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+}
+#draw-tools {
+    left: 0;
+    background: #e8ebf2;
+    box-shadow: 3px 0 10px -5px #000;
+    min-height: 65px;
+    padding: 10px;
+    position: fixed;
+    top: -15px;
+    width: 100%;
+    height: 65px;
+}
+#draw-tools div.form-group.form-group-sm {
+    float: left;
+    width: 300px;
+}
+#draw-tools label#uploadZone {
+    float: left;
+    width: 100px;
+}
+#mainFloor,
+#seatFloor {
+    border: 1px solid #000!important
+}
+#upload-wrapper {
+    width: auto;
+    margin: 0 auto 30px;
+    height: auto;
+    border-radius: 0
+}
+#drawCanvas {
+    margin-top: 20px;
+    width: 1024px;
+    position: relative;
+}
+.rectangle,
+.square {
+    border: 1px solid #000
+}
+.circle,
+.oval,
+.rectangle,
+.square {
+    width: 100px
+}
+.square {
+    height: 100px
+}
+.rectangle {
+    height: 60px
+}
+.circle {
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid #000
+}
+.oval {
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid #000
+}
+ul.shapes {
+    list-style: none;
+    padding: 0;
+    width: 400px;
+    float: left;
+    margin-top: 10px;
+}
+.shapes li:first-child {
+    border-top: 1px solid #fff
+}
+.shapes li {
+    border-bottom: 1px solid #fff;
+    line-height: 30px;
+    padding: 0 10px;
+    float: left;
+}
+.shapes li:hover {
+    background: #61BAE4;
+    color: #eee
+}
+.form-control {
+    margin-bottom: 5px
+}
+.ui-dialog {
+    z-index: 9999!important
+}
+/* Added by Shehan@ITSthe1 - 27012016 */
+#drawCanvas label.whiteLable {
+    color: #ddd;
+    text-shadow: 1px 1px 1px #000;
+    font-size: 10px;
+}
+
+.ui-draggable {
+    transition-property: background-color;
+    transition-duration: 150ms;
+    transition-delay: 5ms;
+}
+
+.ui-draggable:hover {
+    background-color: rgba(255, 174, 174, 0.8);
+}
+
+.ui-draggable.selected:hover {
+    background-color: rgb(218, 18, 18);
+}
+
+@media screen and (min-width: 768px) and (max-width: 1099px) {
+    #draw-shapes, #draw-tools {
+        font-size: 9px;
+    }
+
+    div#draw-shapes .form-group.form-group-sm {
+        width: 120px;
+    }
+
+    div#draw-shapes div#deleteDiv {
+        width: 120px;
+    }
+
+    #draw-shapes label#mapZone {
+        width: 100px;
+    }
+
+    button#deleteShape{
+        font-size: 8px;
+    }
+
+    ul.shapes {
+        width: 300px;
+    }
+
+    button#continueEvent {
+        right: 85px !important;
+        width: 50px !important;
+        font-size: 9px;
+        padding: 3px 5px !important;
+    }
+
+    button#goBack{
+        width: 50px !important;
+        font-size: 9px;
+        padding: 3px 5px !important;
+    }
+
+    #draw-tools div.form-group.form-group-sm {
+        width: 150px;
+    }
+
+    div#draw-tools .form-group.form-group-sm button {
+        font-size: 9px;
+        padding: 3px 5px;
+    }
+
+    div#zoneMaps {
+        overflow-x: auto;
+        height: 25px;
+        float: left;
+        width: initial;
+        overflow-y: auto;
+        max-width: 600px;
+    }
+
+    div#zoneMaps button#deleteMap, div#zoneMaps button#uploadMap{
+        font-size: 9px;
+        padding: 3px 5px;
+    }
+
+    span#drawToolArrow {
+        height: 20px;
+    }
+
+    #drawToolArrow > span.title {
+        line-height: 20px;
+    }
+
+    #drawToolArrow > span.glyphicon {
+        line-height: 20px;
+    }
+}
+
+
+@media screen and (max-width: 767px){
+    form#imageUploader {
+        display: none !important;
+    }
+
+    #draw-shapes, #draw-tools {
+        font-size: 6px;
+    }
+
+    div#draw-shapes .form-group.form-group-sm {
+        width: 80px;
+        margin-top: 20px;
+    }
+
+    div#draw-shapes div#deleteDiv {
+        width: 90px;
+        margin-top: 18px;
+    }
+
+    #draw-shapes label#mapZone {
+        width: 80px;
+        margin-top: 20px;
+    }
+
+    button#deleteShape{
+        font-size: 6px;
+        padding: 1px 3px;
+    }
+
+    ul.shapes {
+        width: 120px;
+        margin-top: 16px;
+    }
+
+    .shapes li {
+        border-bottom: 1px solid #fff;
+        line-height: 15px;
+        padding: 0 5px;
+        float: left;
+    }
+
+    button#continueEvent {
+        right: 85px !important;
+        width: 50px !important;
+        font-size: 6px;
+        padding: 1px 3px !important;
+        margin-top: 15px !important;
+    }
+
+    button#goBack{
+        width: 50px !important;
+        font-size: 6px;
+        padding: 1px 3px !important;
+        margin-top: 15px !important;
+    }
+
+    #draw-tools div.form-group.form-group-sm {
+        margin-top: 15px;
+        width: 80px;
+    }
+
+    div#draw-tools .form-group.form-group-sm button {
+        font-size: 6px;
+        padding: 1px 3px;
+    }
+
+    #draw-tools label#uploadZone {
+        margin-top: 15px;
+        width: 50px;
+    }
+
+    div#zoneMaps {
+        overflow-x: auto;
+        height: 15px;
+        float: left;
+        width: initial;
+        overflow-y: auto;
+        max-width: 380px;
+        margin-top: 15px;
+    }
+
+    div#zoneMaps button#deleteMap, div#zoneMaps button#uploadMap{
+        font-size: 6px;
+        padding: 1px 3px;
+    }
+
+    span#drawToolArrow {
+        height: 15px;
+    }
+
+    #drawToolArrow > span.title {
+        line-height: 15px;
+    }
+
+    #drawToolArrow > span.glyphicon {
+        line-height: 15px;
+    }
+}

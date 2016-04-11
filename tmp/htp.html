@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                //form1.submit();
+            });
+        </script>
+    </head>
+<body>
+<form METHOD="post" ACTION="https://payfort.test.v-psp.com/Tokenization/HostedPage" id=form1 name=form1>
+<input type="hidden" name="ACCOUNT.PSPID" value="testclassic">
+<input type="hidden" name="PARAMETERS.ACCEPTURL" value="http://tapetickets.demos.classicinformatics.com/tmp/index.php">
+<input type="hidden" name="PARAMETERS.EXCEPTIONURL" value="http://tapetickets.demos.classicinformatics.com/tmp/index.php">
+<!--<input type="hidden" name="SHASIGNATURE.SHASIGN" value="A872E2162D6D0D9594B247F1A32EDA16D96D4F0F">-->
+<input type="hidden" name="SHASIGNATURE.SHASIGN" value="F4D99A621EDE910BC560B0D33B9510A9C68CD540">
+<!--<input type="hidden" name="CARD.BRAND" value="">-->
+<input type="hidden" name="CARD.PAYMENTMETHOD" value="CreditCard">
+<input type="hidden" name="LAYOUT.LANGUAGE" value="en_EN">
+<input type="hidden" name="ALIAS.ALIASID" value="C2BCA5D2-35DF-4BBD-A68E-E924F4BD5515">
+<input type="hidden" name="ALIAS.ORDERID" value="1459">
+<input type="submit" value="Pay" id="submit2" name="submit2">
+</form>
+</body>
+</html>

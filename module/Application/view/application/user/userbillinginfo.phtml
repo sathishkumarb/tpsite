@@ -1,0 +1,91 @@
+<h5>Billing Information</h5>
+<?php
+$form = $this->form;
+$form->setAttribute('action', '');
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('firstname')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('lastname')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('streetaddress')); ?>
+    </div>    
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('country')); ?>
+    </div> 
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('city')); ?>
+    </div> 
+    <?php echo $this->formRow($form->get('savebtn')); ?>
+    <?php echo $this->form()->closeTag(); ?>
+<script>
+       $( document ).ready(function() {	
+	$("#userbillinginfo").validate({
+		errorClass:'validation-error',
+		rules: {				
+			firstname:{ maxlength:30,htmltags:true,required:true },
+			lastname:{ maxlength:30,htmltags:true,required:true },			
+                        streetaddress:{required: true,htmltags:true },
+                        city:{required:true},
+                        country:{required:true}        
+		},
+                messages: {
+                        firstname:{                             
+                                maxlength : "First name cannot exceed 30 Characters",
+				htmltags: "HTML tags not supported",
+                                required: "Please enter your first name"
+			},  
+			lastname:{
+                                maxlength : "First Name cannot exceed 30 Characters",
+				htmltags: "HTML Tags not supported",
+                                required: "Please enter your last name"
+                       },
+                       streetaddress:{                                
+				htmltags: "HTML tags not supported",
+                                required: "Please enter street address"
+                       },
+                       city:{
+                                required: "Please select city"
+                       },
+                       country:{
+                                required: "Please select country"
+                       }
+                },
+		submitHandler: function(form) {
+			$("#userbillinginfo .alert-danger").hide();
+                        var formData = $("#userbillinginfo").serialize();                                                   
+                        $.post('<?php echo $this->action;?>', formData, function(response){
+                            var obj = jQuery.parseJSON( response );
+                            console.log(obj);                            
+                            var status = obj.status;
+                            var msg = obj.msg;                                  
+                            if(status == 1){
+                                $(".billingdetails .alert-error").hide();
+                                $(".billingdetails .alert-success").show();
+                                $(".billingdetails .alert-success").html(msg);                           
+                            }else if(status == -1){                                                               
+                                window.location = '<?php echo $this->url('home') ?>';
+                            }else{
+                                $(".billingdetails .alert-error").html(msg);
+                                $(".billingdetails .alert-error").show();
+                                $(".billingdetails .alert-success").hide();                                    
+                            }
+                        });
+		}                
+	});
+        $.validator.addMethod("htmltags", checkHTMLTags);  
+});      
+function getCity(countryid){
+            var fetch_city_url = "<?php echo $this->url('getcity'); ?>"+countryid;
+            $.ajax({
+                url: fetch_city_url        
+            })
+            .done(function( data ) {
+              $('#city').html(data);
+            });
+        }
+</script>

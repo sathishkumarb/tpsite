@@ -1,0 +1,135 @@
+<div class="spcallmain"></div>
+<div class="panel panel-default panel-block">
+    <div class="list-group">
+        <div id="responsive-bordered-table" class="list-group-item">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="section-title">Add / Edit - Event Map</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="section-title"><?= $eventData['eventName']; ?>
+                            <br>
+                            <small><?= $eventData['eventDesc']; ?></small>
+                            <br>
+                            <small>Artist - <?= $eventData['eventArtist']; ?></small>
+                        </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="uploadEventMap">
+                            <input type="hidden" id="layout_id" name="layout_id" value="<?php echo $layout_id; ?>"/>
+                            <input type="hidden" id="event_id" name="event_id" value="<?php echo $event_id; ?>"/>
+                            <?php
+                            if ($map_count !== '0') {
+                                ?><button type="button" name="editMap" id="editMap" class="btn btn-default saveaddridt">Change Event Map</button><?php
+                            } else {
+                                ?><button type="button" name="eventMap" id="eventMap" class="btn btn-default saveaddridt">Upload Event Map</button><?php
+                            }
+                            ?>
+                            <span><!--msg--></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div>
+                            <button type="button" id="cancel" style="float:right;" class="saveMapBtn btn btn-default saveaddriv unpaistridt" >Cancel</button>
+                            &nbsp;&nbsp;
+                            <button type="button" id="publish" style="float:right;margin-right: 10px;" class="saveMapBtn btn btn-default saveaddridt" >Publish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Added by Yesh 01122015-->
+    <div class="mainModalOverlay">
+        <div id="upload-wrapper">
+            <div id="mainForm" align="center">
+                <h3>Upload Main Floor Map</h3>
+                <form id="imageUploader" class="form-inline" action="<?php echo $this->basePath(); ?>/admin/event/ajaxprocessupload" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="FileInput" id="FileInput">
+                    </div>
+                    <input type="submit"  id="submit-btn" value="Upload" class="btn btn-default">
+                    <img src="<?php echo $this->basePath(); ?>/img/ajax-loader.gif" id="loading-img" style="display:none;" alt="Please Wait"/>
+                </form>
+                <div id="progressbox" ><div id="progressbar"></div ><div id="statustxt">0%</div></div>
+                <div id="output"></div>
+                <div id="drawCanvas">
+                    <img id="mainFloor" class="mapping" src="" alt="" width="" height="">
+                </div>
+                <div id="dialogArea" title="zone details">
+                    <form id="dialogAreaForm">
+                        <div class="form-group form-group-sm">
+                            <input type="text" name="boxName" pattern="[A-Za-z]{3}" id="boxName" placeholder="add a name to your zone" class="form-control"/>
+                            <input type="text" name="boxDtcmName" id="boxDtcmName" placeholder="add a dtcm name to your zone" class="form-control"/>
+                            <input type="number" name="boxPrice" id="boxPrice" placeholder="add a price to your zone" class="form-control"/>
+                            <input type="number" name="boxCount" id="boxCount" placeholder="number of seats" class="form-control"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="draw-tools">
+            <span id="drawToolArrow">
+                <span class="title">Zone Tools</span>
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </span>
+            <div class="alert alert-info"></div>
+            <div class="form-group form-group-sm">
+                <form id="tmpAreaForm" class="hidden">
+                    <input id="areaName" name="areaName" type="text" class="form-control">
+                    <input id="coordsText" name="coordsText" type="text" class="form-control">
+                    <input id="zoneCount" name="zoneCount" type="text" class="form-control">
+                </form>
+                <input id="imageName" name="imageName" type="text"  class="form-control hidden">
+                <button id="createZone" class="btn btn-primary btn-sm btn-block">Create Zone</button>
+                <button id="clearAll" class="btn btn-primary btn-sm btn-block">Clear All</button>
+            </div>
+            <label id="uploadZone" class="control-label" for="uploadZone">Zone maps : <span></span></label>
+            <div id="zoneMaps" class="form-group"></div>
+        </div>
+        <div id="draw-shapes">
+            <span id="drawShapesArrow">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+                <span class="title">Shape Tools</span>
+            </span>
+            <div class="form-group form-group-sm">
+                <form id="tmpZoneForm" class="hidden">
+                    <input id="zoneID" name="zoneID" type="text" class="form-control">
+                    <input id="mapName" name="mapName" type="text"  class="form-control">
+                    <input id="mapCount" name="mapCount" type="text"  class="form-control">
+                    <input id="zoneName" name="zoneName" type="text"  class="form-control">
+                </form>
+                <select id="zoneArea" class="form-group">
+                    <option value="">Select Zone / Area</option>
+                </select>
+            </div>
+            <div id="deleteDiv"></div>
+            <label id="mapZone" class="control-label" for="uploadZone">Available seats : <span></span></label>
+            <ul class="shapes">
+                <li id="diamond" class="hidden">Diamond</li>
+                <li id="rectangle">Rectangle</li>
+                <li id="square">Square</li>
+                <li id="circle">Circle</li>
+                <li id="triangle" class="hidden">Triangle</li>
+                <li id="oval">Oval</li>
+            </ul>
+            <button id="continueEvent" class="btn btn-primary btn-sm btn-block" style="right: 135px; position: absolute; width: 100px; margin-top: 10px;">Continue</button>
+            <button id="goBack" class="btn btn-primary btn-sm btn-block" style="right: 30px; position: absolute; width: 100px; margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
+    <!--Added by Yesh 01122015-->
+    <link href="<?php echo $this->basePath(); ?>/assets/event/jquery-ui.css" media="screen" rel="stylesheet" type="text/css">
+    <?php
+    echo $this->headScript()->prependFile("//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.min.js")->prependFile($this->basePath() . '/js/jquery.validate.js')->prependFile($this->basePath('/js/jquery.table.addrow.js'))->prependFile($this->basePath() . '/assets/event/jquery-ui.js')->prependFile($this->basePath() . '/assets/event/jquery-1.js');
+    ?>
+    <!--Added by Yesh 01122015-->
+    <script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/admin/scripts/jquery.form.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/admin/scripts/ajaxUploader.js"></script>
+    <script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/admin/scripts/coordinateMaker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/admin/styles/customStyle.min.css" />
+    <!--Added by Yesh 01122015-->

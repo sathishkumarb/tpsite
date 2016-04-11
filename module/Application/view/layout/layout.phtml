@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
+$projectTitle = "Tapetickets ::";
+?>
+<title><?php echo $projectTitle." ".$pageTitle; ?></title>
+<?php
+if(isset($this->keywords)){ ?>
+<meta name="keywords" content="<?php echo $this->keywords; ?>">
+<?php } ?>
+<?php if(isset($this->metadesc)){ ?>
+<meta name="description" content="<?php echo $this->metadesc; ?>">
+<?php } ?>    
+<link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+<?php echo $this->headLink()
+                ->prependStylesheet($this->basePath('/assets/frontend/css/custom-style.css'))
+                ->prependStylesheet($this->basePath('/assets/frontend/css/theme-style.css'))
+                ->prependStylesheet($this->basePath('/assets/frontend/css/font-awesome.min.css'))
+                ->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap.min.css'))                
+        ?>
+
+<script type="text/javascript">
+    var FULL_URL_PATH = '<?php echo $this->url('home',array(),array('force_canonical' => true));?>';
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+<?php echo $this->headScript()
+                /* ->prependFile($this->basePath('/assets/frontend/js/bootstrap3-typeahead.min.js'))*/                
+                //  ->appendFile($this->basePath('/assets/frontend/js/underscore-min.js'))
+                ->appendFile($this->basePath('/assets/frontend/js/bootstrap.min.js'))   
+                ->appendFile($this->basePath('/assets/frontend/js/bootstrap3-typeahead.min.js'))
+                ->appendFile($this->basePath('/assets/frontend/js/common.js'))
+                ->appendFile($this->basePath('/js/jquery.validate.js'))
+                ->appendFile($this->basePath('/assets/frontend/js/select2.js'));
+?>
+ 
+
+</head>
+
+<body>
+    
+    
+<div class="navbar-wrapper" id="header">
+    <?php 
+    if(!isset($this->userCity)){
+        $this->userCity = "";
+    }
+    if(!isset($this->searchedCategory)){
+        $this->searchedCategory = "";
+    }
+    if(!isset($this->userId)){$this->userId = '';}
+    ?>
+    <?php echo $this->partial('layout/_header',array('cities'=>$cities,'categories'=>$categories,'userId'=>$this->userId,'username'=>$this->username,'active_city'=>$this->userCity,'active_category'=>$this->searchedCategory)); ?>
+</div>
+<!--/navbar wrapper-->
+
+<!-- Home Page Slider -->
+<?php 
+if(($this->url())===($this->url('home'))){
+    echo $this->partial('layout/_homepageslider'); 
+}
+?>
+
+<div class="container main">
+    <?php echo $this->content; ?>
+</div>
+<!--/main-->
+
+<footer id="footer">
+    <?php echo $this->partial('layout/_footer'); ?>
+</footer>
+
+<!-- Modal Login -->
+<?php
+if(empty($this->userId)){
+    echo $this->partial('layout/_login',array('form'=>$loginForm,'action'=>$this->url('userlogin'))); 
+}
+?>
+<!-- /Modal Login --> 
+
+<!-- Modal signup -->
+<?php 
+if(empty($this->userId)){
+    if(!isset($succsMsg) || ($succsMsg == '')){
+        $succsMsg = "";
+    }
+    echo $this->partial('layout/_signup',array('form'=>$signupForm,'succsMsg'=>$succsMsg));     
+}
+?>
+<!-- /Modal signup --> 
+
+<!-- Modal Forgot Password -->
+<?php 
+if(empty($this->userId)){
+    echo $this->partial('layout/_forgotpass',array('form'=>$forgotpassForm,'action'=>$this->url('forgotpassword')));     
+}
+?>
+<!-- /Modal Forgot Password -->
+
+<script src="<?php echo $this->basePath('/assets/frontend/js/custom-function.js');?>"></script>
+<script type="text/javascript">
+    $('document').ready(function(){
+        <?php if((isset($signupError))&&($signupError != 0)){ ?> 
+            $('#signup').modal('show');
+            $('#signupsucssmsg').delay(4000).fadeOut();
+        <?php } ?>        
+        _.compile = function(templ) {
+            var compiled = this.template(templ);
+            compiled.render = function(ctx) {
+               return this(ctx);
+            }
+            return compiled;
+         }
+	$.ajax({
+	  url: "<?php echo $this->basePath() ?>/geteventdata",
+	  context: document.body
+	}).done(function(data) {
+            var jsontext = eval('('+data+')');
+            console.log(jsontext);         
+            $('#typeaheadtext').typeahead([
+                    {
+                        name: 'nores',                                                                                     
+                        header: '<a href="#" class="eventsearch">Search All Results</a>',                        
+			local: [{}]
+                    },
+                    {
+                        name: 'Event',
+                        local: jsontext.event,                        
+                        valueKey: 'title',
+                        limit:3,
+                        engine: _,                        
+                       
+                        header: '<div class="all-results"><label>Event</label>',
+                        template: '<li><a href="<?php echo $this->basePath() ?>/events/title/<%= title %>"><%= title %></a></li>',
+                        footer: '</div>'
+						
+						
+                    },
+                    {
+                        name: 'Artist',
+                        local: jsontext.artist,
+                        valueKey: 'name',
+                        limit:3,
+                        engine: _,                        
+                        template: '<li><a href="<?php echo $this->basePath() ?>/events/artist/<%= name %>"><%= name %></a></li>',
+                        header: '<div class="all-results"><label>Artist</label>',
+                        footer: '</div>'
+                    },
+                    {
+                        name: 'Venue',
+                        local: jsontext.venue,
+                        limit:3,
+                        valueKey: 'name',				
+                        engine: _,                        
+                        template: '<li><a href="<?php echo $this->basePath() ?>/events/venue/<%= name %>"><%= name %></a></li>',
+                        header: '<div class="all-results"><label>Venue</label>',
+                        footer: '</div>'                        
+                    }
+            ]);		  
+	});        
+    });    
+    $( "body" ).delegate( ".eventsearch", "click", function() {
+       var txt = $('#typeaheadtext').val();
+       window.location = "<?php echo $this->basePath() ?>/events/results/"+txt;
+    });   
+    $('.signout').click(function(e){                
+        $.ajax({
+            url: "<?php echo $this->url('userlogout'); ?>"            
+        }).done(function() {
+            window.location = "<?php echo $this->url('home'); ?>";
+        });
+    });
+</script>
+<style>
+    .tt-hint{display:none;}
+    .tt-dataset-nores{display:block !important;}
+</style>
+</body>
+</html>

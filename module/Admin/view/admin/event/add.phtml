@@ -1,0 +1,621 @@
+<!--[if gte IE 9]>
+<style type="text/css">.gradient {filter: none}</style>
+<![endif]-->					
+
+<div class="row">
+    <div class="col-md-12 pad12">
+        <!-- MASKED INPUT FIELDS -->
+        <div class="panel panel-default panel-block">
+            <div class="list-group">
+                <div class="se-pre-con"></div>
+                <div class="list-group-item" id="masked-input-fields">
+                    <h4 class="section-title">Add Event</h4>
+                    <form action="" method="post" id="frmUpdateVenue" class="form-horizontal" enctype="multipart/form-data" >  
+                        <input name="datetimeCountHiddenValue" id="datetimeCountHiddenValue" value="1" type="hidden">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="licenseno">Category</label>
+                            <div class="col-lg-10">
+                                <div class="row">
+                                    <input type="hidden" value="1" class="form-control" id="txtlayout" name="txtlayout" />
+                                    <div class="col-xs-18 col-md-6">
+                                        <select class="form-control" id="txtcategory" name="txtcategory">
+                                            <option value="">Select Category</option>
+                                            <?php if (count($dataCategories) > 0) { ?>	
+                                                <?php foreach ($dataCategories as $categories) { ?>
+                                                    <option value="<?php echo $categories->getId(); ?>"><?php echo $categories->getCategoryName(); ?></option>
+                                                <?php } ?>	
+                                            <?php } ?>	
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">
+                                        <input type="text" class="form-control" id="txtperfcode" name="txtperfcode" placeholder="Performance Code"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="adodriver">
+                                Title                                           
+                            </label>
+                            <div class="col-lg-10">
+                                <input class="form-control" id="txttitle" type="text" name="txttitle" placeholder="Event Title">
+                            </div>
+                        </div>                                 
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="firstname">
+                                Description
+                            </label>
+                            <div class="col-lg-10">
+                                <textarea class="form-control" id="txtdesc"  name="txtdesc" placeholder="Event Description" style="height: 120px;" ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="lastname">
+                                Artist                                            
+                            </label>
+                            <div class="col-lg-10">
+                                <input class="form-control" id="txtartist" type="text" name="txtartist" placeholder="Event Artist">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="address">
+                                Location                                            
+                            </label>
+                            <div class="col-lg-10">
+                                <div class="row">
+                                    <div class="col-xs-18 col-md-6">
+                                        <input class="form-control" id="txtaddress" type="text" name="txtaddress" placeholder="Street Address ">
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">
+                                        <select class="form-control" id="txtcountry" name="txtcountry" onchange="getCity(this.value);">
+                                            <option value="">Select Country</option>
+                                            <?php if (count($dataCountries) > 0) { ?>	
+                                                <?php foreach ($dataCountries as $countries) { ?>
+                                                    <option value="<?php echo $countries->getId(); ?>"><?php echo $countries->getCountryName(); ?></option>
+                                                <?php } ?>	
+                                            <?php } ?>	
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                            
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="address">
+
+                            </label>
+                            <div class="col-lg-10">
+                                <div class="row">                                           
+
+                                    <div class="col-xs-18 col-md-6">
+                                        <select class="form-control" id="txtcity" name="txtcity">
+                                            <option value="">Select City</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">
+                                        <input class="form-control" id="txtzipcode" type="text" name="txtzipcode" placeholder="Zipcode">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="address">
+                                Venue Title & Icon 
+                            </label>
+                            <div class="col-lg-10">
+                                <div class="row">                                           
+
+                                    <div class="col-xs-18 col-md-6">
+                                        <input class="form-control" id="txtvenue_title" type="text" name="txtvenue_title" placeholder="Title of Venue">
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">
+                                        <input id="txtvenue_icon" type="file" name="txtvenue_icon">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="datofbirth">
+                                Schedule Date Time                                            
+                            </label>
+                            <div class="col-lg-10">
+                                <div class="row">   
+                                    <div class="col-xs-18 col-md-6">
+                                        <table border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td>
+                                                    <div class="col-lg-12">
+                                                        <input class="date start form-control" id="txtdate" type="text" name="txtdate" placeholder="Date">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="col-lg-12">
+                                                        <input class="times start form-control" id="txttime" type="text" name="txttime" placeholder="Time">
+                                                    </div>
+                                                </td>
+                                                <td><img class="delRow" src="<?php echo $this->basePath() . '/img/'; ?>remove.png" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">&nbsp;</td>
+                                                <td><img class="addRow" src="<?php echo $this->basePath() . '/img/'; ?>add_new_row.png" ></td>
+                                            </tr>
+                                        </table>														
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">
+                                        <input class="form-control" id="txtlink" type="text" name="txtlink" placeholder="Link of Event (Optional)">
+                                    </div>	
+                                </div>                                  
+                            </div>                                  
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="cartype" class="col-lg-2 control-label">
+                                What's allowed
+                            </label>
+                            <div class="col-lg-10">      
+                                <?php if (count($dataOption) > 0) { ?>	
+                                    <?php foreach ($dataOption as $option) { ?>
+                                        <label>
+                                            <input type="checkbox" id="txtoption[]" name="txtoption[]" value="<?php echo $option->getId(); ?>"> <?php echo $option->getName(); ?>&nbsp;
+                                        </label>
+                                    <?php } ?>	
+                                <?php } ?>	                             
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="rougno">
+                                Image Big(Event Detail Image) 
+                            </label>
+                            <div class="col-lg-10">
+                                <div class="row">
+                                    <div class="col-xs-18 col-md-6">
+                                        <input id="txtimage_big" type="file" name="txtimage_big">
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">														
+                                        <label style="float:left;">
+                                            Image Medium (Home/Search Page Image)&nbsp;&nbsp;&nbsp;&nbsp;                                           
+                                        </label>
+                                        <div><input id="txtimage_medium" type="file" name="txtimage_medium">      </div>                          
+                                    </div>	
+                                </div>										
+
+                            </div>
+                        </div>   
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label" for="acname">
+                                Image Small(My Event Image)                                            
+                            </label>
+                            <div class="col-lg-10">
+                                <div class="row">
+                                    <div class="col-xs-18 col-md-6">
+                                        <input id="txtimage_small" type="file" name="txtimage_small">
+                                    </div>
+                                    <div class="col-xs-18 col-md-6">
+                                        <label style="float:left;">
+                                            Featured banner&nbsp;&nbsp;&nbsp;&nbsp;                                           
+                                        </label>
+                                        <label style="float:left;" ><input type="checkbox" id="txt_check_feature" name="txt_check_feature" value="1">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                        <div id="banner_id" style="display:none;">
+                                            <input id="txtimage_banner" type="file" name="txtimage_banner">                                   
+                                        </div>	
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btnaddriv"><button type="submit" name="save_btn" id="save_btn" class="btn btn-default saveaddridt">Next</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>                                   
+
+<link href="<?php echo $this->basePath(); ?>/assets/event/jquery-ui.css" media="screen" rel="stylesheet" type="text/css">
+
+<?php
+echo $this->headScript()
+        ->prependFile("//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.min.js")
+        ->prependFile($this->basePath() . '/js/jquery.validate.js')
+        ->prependFile($this->basePath('js/jquery.table.addrow.js'))
+        ->prependFile($this->basePath() . '/assets/event/jquery-ui.js')
+        ->prependFile($this->basePath() . '/assets/event/jquery-1.js');
+/* ->prependFile($this->basePath('assets/admin/scripts/vendor/tinymce/tinymce.min.js')) */
+?>
+<script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/datepicker/jquery.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/datepicker/jquery.timepicker.css" />
+
+<script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/datepicker/lib/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/datepicker/lib/bootstrap-datepicker.css" />       
+
+<script>
+                                            $(document).ready(function () {
+                                                /**
+                                                 * This script is used for validate event form.
+                                                 * @Author Vinod Kandwal
+                                                 */
+                                                jQuery.validator.setDefaults({
+                                                    debug: true,
+                                                    success: "valid"
+                                                });
+                                                $("#frmUpdateVenue").validate({
+                                                    errorClass: 'validation-error',
+                                                    rules: {
+                                                        txtlayout: {required: true},
+                                                        txtperfcode: {required: true},
+                                                        txttitle: {required: true, htmltags: true, maxlength: 200},
+                                                        txtdesc: {required: true},
+                                                        txtartist: {required: true, htmltags: true, maxlength: 200},
+                                                        txtaddress: {required: true, htmltags: true, maxlength: 200},
+                                                        txtcountry: {required: true},
+                                                        txtcity: {required: true},
+                                                        txtzipcode: {
+                                                            required: true,
+                                                            digits: true,
+                                                            /* checkZipCode: true */
+                                                        },
+                                                        txtvenue_title: {required: true, htmltags: true, maxlength: 100},
+                                                        txtvenue_icon: {
+                                                            required: true,
+                                                            extension: "jpg|jpeg|gif|png"
+                                                        },
+                                                        txtdate1: {required: true},
+                                                        txttime1: {required: true},
+                                                        txtcategory: {required: true},
+                                                        txtimage_small: {required: true, imgsmallsize: true},
+                                                        txtimage_big: {
+                                                            required: true,
+                                                            extension: "jpg|jpeg|gif|png",
+                                                            imgbigsize: true
+                                                        },
+                                                        txtimage_medium: {
+                                                            required: true,
+                                                            extension: "jpg|jpeg|gif|png",
+                                                            imgmediumsize: true
+                                                        },
+                                                        txtimage_banner: {
+                                                            imgbanner: true,
+                                                            extension: "jpg|jpeg|gif|png",
+                                                            imgbannersize: true
+                                                        },
+                                                    },
+                                                    messages: {
+                                                        'txtlayout': {
+                                                            required: "Please select layout."
+                                                        },
+                                                        'txtperfcode': {
+                                                            required: "Please enter perf code."
+                                                        },
+                                                        'txttitle': {
+                                                            required: "Please enter event title.", htmltags: "html tags not allowed"
+                                                        },
+                                                        'txtdesc': {
+                                                            required: "Please enter event description."
+                                                        },
+                                                        'txtartist': {
+                                                            required: "Please enter event artist.", htmltags: "html tags not allowed"
+                                                        },
+                                                        'txtaddress': {
+                                                            required: "Please enter venue detail.", htmltags: "html tags not allowed"
+                                                        },
+                                                        'txtcountry': {
+                                                            required: "Please select country."
+                                                        },
+                                                        'txtcity': {
+                                                            required: "Please select city."
+                                                        },
+                                                        'txtzipcode': {
+                                                            required: "Please enter zip code.",
+                                                            digits: "Please enter only numeric values.",
+                                                            /*   checkZipCode: "Please enter valid zip code." */
+                                                        },
+                                                        'txtvenue_title': {
+                                                            required: "Please enter venue title.", htmltags: "Html tags not allowed"
+                                                        },
+                                                        'txtvenue_icon': {
+                                                            required: "Please upload venue icon.",
+                                                            extension: "Only jpg,gif,png extensions are supported."
+                                                        },
+                                                        'txtdate1': {
+                                                            required: "Please select event date."
+                                                        },
+                                                        'txttime1': {
+                                                            required: "Please select event time."
+                                                        },
+                                                        'txtcategory': {
+                                                            required: "Please select category."
+                                                        },
+                                                        'txtimage_big': {
+                                                            required: "Please upload event big image.",
+                                                            extension: "Only jpg,gif,png extensions are supported.",
+                                                            imgbigsize: "Please choose an image with 1920*800."
+                                                        },
+                                                        'txtimage_medium': {
+                                                            required: "Please upload medium image.",
+                                                            extension: "Only jpg,gif,png extensions are supported.",
+                                                            imgmediumsize: "Please choose an image with 381*531."
+                                                        },
+                                                        'txtimage_small': {
+                                                            required: "Please upload small image.",
+                                                            extension: "Only jpg,gif,png extensions are supported.",
+                                                            imgsmallsize: "Please choose an image with 1203*677."
+                                                        },
+                                                        txtimage_banner: {
+                                                            imgbanner: "Please choose banner image.",
+                                                            extension: "Only jpg,gif,png extensions are supported.",
+                                                            imgbannersize: "Please choose an image with 1920*800."
+                                                        },
+                                                    },
+                                                    submitHandler: function (form) {
+                                                        form.submit();
+                                                    }
+
+                                                });
+
+                                                var _URL = window.URL || window.webkitURL;
+                                                $("#txtimage_banner").change(function (e) {
+                                                    var file, img;
+                                                    if ((file = this.files[0])) {
+                                                        img = new Image();
+                                                        img.src = _URL.createObjectURL(file);
+                                                        img.onload = function () {
+                                                            $("#txtimage_banner").attr("data-width", this.width);
+                                                            $("#txtimage_banner").attr("data-height", this.height);
+                                                        };
+                                                    }
+                                                });
+                                                $("#txtimage_medium").change(function (e) {
+                                                    var file, img;
+                                                    if ((file = this.files[0])) {
+                                                        img = new Image();
+                                                        img.src = _URL.createObjectURL(file);
+                                                        img.onload = function () {
+                                                            $("#txtimage_medium").attr("data-width", this.width);
+                                                            $("#txtimage_medium").attr("data-height", this.height);
+                                                        };
+                                                    }
+                                                });
+                                                $("#txtimage_small").change(function (e) {
+                                                    var file, img;
+                                                    if ((file = this.files[0])) {
+                                                        img = new Image();
+                                                        img.src = _URL.createObjectURL(file);
+                                                        img.onload = function () {
+                                                            $("#txtimage_small").attr("data-width", this.width);
+                                                            $("#txtimage_small").attr("data-height", this.height);
+                                                        };
+                                                    }
+                                                });
+                                                $("#txtimage_big").change(function (e) {
+                                                    var file, img;
+                                                    if ((file = this.files[0])) {
+                                                        img = new Image();
+                                                        img.src = _URL.createObjectURL(file);
+                                                        img.onload = function () {
+                                                            $("#txtimage_big").attr("data-width", this.width);
+                                                            $("#txtimage_big").attr("data-height", this.height);
+                                                        };
+                                                    }
+                                                });
+
+                                                jQuery.validator.addMethod("imgbannersize", function imagebannersize(value, element, params) {
+                                                    if (document.getElementById('txt_check_feature').checked)
+                                                    {
+
+                                                        fwidth = $("#txtimage_banner").attr("data-width");
+                                                        fheight = $("#txtimage_banner").attr("data-height");
+
+                                                        if (fwidth == 1920 && fheight == 800) {
+                                                            return true;
+                                                        } else {
+                                                            return false;
+                                                        }
+
+                                                    } else {
+                                                        return true;
+                                                    }
+                                                });
+                                                jQuery.validator.addMethod("imgbigsize", function imagebannersize(value, element, params) {
+
+                                                    fwidth = $("#txtimage_big").attr("data-width");
+                                                    fheight = $("#txtimage_big").attr("data-height");
+                                                    console.log(fwidth + "" + fheight);
+                                                    if (fwidth == 1920 && fheight == 800) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                });
+                                                jQuery.validator.addMethod("imgsmallsize", function imagebannersize(value, element, params) {
+                                                    fwidth = $("#txtimage_small").attr("data-width");
+                                                    fheight = $("#txtimage_small").attr("data-height");
+
+                                                    if (fwidth == 1203 && fheight == 677) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                });
+                                                jQuery.validator.addMethod("imgmediumsize", function imagebannersize(value, element, params) {
+                                                    fwidth = $("#txtimage_medium").attr("data-width");
+                                                    fheight = $("#txtimage_medium").attr("data-height");
+
+                                                    if (fwidth == 381 && fheight == 531) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+
+                                                });
+                                                /**
+                                                 * This function check html tags in field value
+                                                 * @Author Vinod Kandwal
+                                                 */
+                                                jQuery.validator.addMethod("htmltags", function checkHTMLTags(value, element, params) {
+                                                    if (value.match(/([\<])([^\>]{1,})*([\>])/i) == null) {
+                                                        return true;
+                                                    } else {
+                                                        return false;
+                                                    }
+                                                });
+                                                $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                                                    return arg != value;
+                                                }, "Value must not equal arg.");
+                                                /**
+                                                 * This function check Image Banners    
+                                                 * @Author Aditya Tayal
+                                                 */
+                                                jQuery.validator.addMethod("imgbanner", function imagebanner(value, element, params) {
+                                                    if (document.getElementById('txt_check_feature').checked) {
+                                                        if ($('#txtimage_banner').val() == '') {
+                                                            return false;
+                                                        } else {
+                                                            return true;
+                                                        }
+                                                    } else {
+                                                        return true;
+                                                    }
+                                                });
+
+                                                /**
+                                                 * This function is used for zipcode validation.
+                                                 * @Author Vinod Kandwal
+                                                 */
+                                                /* jQuery.validator.addMethod('checkZipCode', function(value, element) {
+                                                 return this.optional(element) || !!value.trim().match(/^\d{5}(?:[-\s]\d{4})?$/);
+                                                 }, 'Invalid zip code');*/
+
+                                                /**
+                                                 *	This script is used for initialize date and time picker.
+                                                 */
+                                                $('#txttime').timepicker({
+                                                    'showDuration': true,
+                                                    'timeFormat': 'h:i A'
+                                                });
+                                                $("body").on("focus", "#txtdate1", function () {
+                                                    $(this).val();
+                                                    $(this).removeClass('hasDatepicker').datepicker({
+                                                        'format': 'yyyy-m-d',
+                                                        'minDate': +1,
+                                                        'autoclose': true,
+                                                    });
+                                                });
+                                                $("body").on("focus", "#txttime1", function () {
+                                                    $(this).val();
+                                                    $(this).removeClass('ui-timepicker-input').timepicker({
+                                                        'showDuration': true,
+                                                        'timeFormat': 'h:i A'
+                                                    });
+                                                });
+                                                /**
+                                                 * This script is used for add new row date and time schedule for event.
+                                                 * @Author Vinod Kandwal
+                                                 */
+                                                var row_1 = 1;
+                                                var row = 0;
+                                                $(".addRow").btnAddRow({
+                                                    maxRow: 6,
+                                                    inputBoxAutoNumber: true
+                                                }, function (row) {
+                                                    if (row_1 <= 6) {
+                                                        row_1 = parseInt(row.length) + row_1;
+                                                        $("#datetimeCountHiddenValue").val(row_1);
+
+                                                        $("body").on("focus", "#txtdate" + row_1, function () {
+                                                            $(this).val();
+                                                            $(this).removeClass('hasDatepicker').datepicker({
+                                                                'format': 'yyyy-m-d',
+                                                                'minDate': +1,
+                                                                'autoclose': true
+                                                            });
+                                                        });
+
+                                                        $("body").on("focus", "#txttime" + row_1, function () {
+                                                            $(this).val();
+                                                            $(this).removeClass('ui-timepicker-input').timepicker({
+                                                                'showDuration': true,
+                                                                'timeFormat': 'h:i A'
+                                                            });
+                                                        });
+
+                                                        $("#txtdate" + row_1).rules("add", {
+                                                            required: true,
+                                                            messages: {
+                                                                required: "Please select event date."
+                                                            }
+                                                        });
+                                                        $("#txttime" + row_1).rules("add", {
+                                                            required: true,
+                                                            messages: {
+                                                                required: "Please select event time."
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                                //$(".delRow").btnDelRow();
+
+                                                $(".delRow").btnDelRow(function (row) {
+                                                    row_1 = row_1 - parseInt(row.length);
+                                                    $("#datetimeCountHiddenValue").val(row_1);
+                                                });
+                                            });
+                                            /**
+                                             * This script is used for Event description editor.
+                                             * @Author Vinod Kandwal
+                                             */
+                                            /* tinyMCE.init({
+                                             selector: 'textarea',
+                                             theme: "modern",
+                                             mode: "exact",
+                                             elements: "template",
+                                             width: "580",
+                                             height: "200",
+                                             plugins: "paste, table, code",
+                                             theme_modern_resizing: true,
+                                             theme_modern_resizing_use_cookie: false,
+                                             theme_modern_toolbar_location: "top",
+                                             theme_modern_buttons1: "formatselect, bold, italic, underline, strikethrough, |, justifyleft, justifycenter, justifyright, justifyfull, |, bullist, numlist, |, outdent, indent, blockquote, |, undo, redo, cleanup, removeformat, pasteword, code ",
+                                             theme_modern_buttons2: "link, unlink, anchor, |, image, hr , sub, sup, charmap, |, forecolor, backcolor, |, tablecontrols",
+                                             theme_modern_buttons3: "",
+                                             theme_modern_blockformats: "p,h1,h2,h3,blockquote,dt,dd"
+                                             }); */
+                                            /**
+                                             * This script is used for make featured event. 
+                                             * @Author Vinod Kandwal
+                                             */
+                                            $('#txt_check_feature').click(function () {
+                                                if ($(this).is(':checked'))
+                                                    $("#banner_id").show();
+                                                else
+                                                    $("#banner_id").hide();
+                                            });
+                                            /**
+                                             * This function is used for get state.
+                                             * @Author Vinod Kandwal
+                                             */
+                                            function getCity(country_id) {
+                                                $(".se-pre-con").show();
+                                                if (country_id != '') {
+                                                    jQuery.ajax({
+                                                        type: "POST",
+                                                        url: FULL_URL_PATH + '/admin/common/city',
+                                                        data: 'country_id=' + country_id,
+                                                        success: function (data) {
+                                                            $("#txtcity").html(data);
+                                                            $(".se-pre-con").hide();
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+</script>
+

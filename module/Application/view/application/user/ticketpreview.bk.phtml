@@ -1,0 +1,229 @@
+<div class="container main mtop-55">
+    <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+
+    <link href="<?php echo $this->basePath('/assets/frontend/css/font-awesome.min.css'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo $this->basePath('/assets/frontend/css/theme-style.css'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo $this->basePath('/assets/frontend/css/custom-style.css'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo $this->basePath('/assets/frontend/css/print-preview.css'); ?>" rel="stylesheet" type="text/css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+    <script type="text/javascript">
+        var FULL_URL_PATH = '<?php echo $this->url('home', array(), array('force_canonical' => true)); ?>';
+        function Popup(data) {
+            var c = String(data);
+            var myWindow = window.open('', 'My Ticket', '');
+            myWindow.document.write('<html><head><title></title><link href="//fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Raleway:400,300,700" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/bootstrap.min.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/theme-style.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/custom-style.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/print-preview.css" rel="stylesheet" type="text/css"></head><body onload="printPage()">');
+            myWindow.document.write('<div class="container main"><div class="row"><div class="col-md-8"><div class="ticket-preview">');
+            myWindow.document.write(c);
+            myWindow.document.write('</div></div></div></div><scrip' + 't type="text/javascript">function printPage(){setTimeout(function(){window.print()},1000);}</sc' + 'ript></body></html>');
+            myWindow.document.close();
+            myWindow.focus();
+//            myWindow.print();
+//            myWindow.close();
+            return true;
+        }
+        function printTarget(id) {
+            var data = jQuery('#' + id).clone().html();
+            Popup(data);
+        }
+        
+        jQuery(document).ready(function(){
+            document.cookie = 'globTimer=""; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+            document.cookie = 'scheduleId=""; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+            document.cookie = 'seatsArray=""; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        });
+    </script>
+    <div class="row">
+        <?php
+        if (!$status) {
+            ?><h2 class="heading">No Tickets found</h2><?php
+        } else {
+            ?>
+            <div class="col-md-8">
+                <div class="ticket-preview">
+                    <?php
+                    $date = date('F d, Y', strtotime($bookingData['EventDate']));
+                    $bookingDate = date('F d Y', strtotime($bookingData['BookingMadeDate']));
+                    $time = date('h:i A', strtotime($bookingData['EventTime']));
+                    if ($view) {
+                        ?><div class="success_message"> Your Order Id <?= $bookingData['orderId']; ?> payment is success.</div><?php
+                    }
+                    if ($error) {
+                        ?><div class="success_message"><?= $msg; ?></div><?php
+                    } else {
+                        ?>
+                        <h2 class="heading">
+                            <span>Ticket Preview</span>
+                            <button class="btn-blue pull-right" onclick="printTarget('printTickets')">Print Tickets</button>
+                        </h2>
+                        <div id="printTickets">
+                            <?php
+                            foreach ($seatsData as $row) {
+                                $zoneTitle = $row->zoneTitle;
+                                $zonePrice = $row->zonePrice;
+                                foreach ($row->seatIds as $Id) {
+                                    $label = explode("_", $Id['seatLabel'])[1];
+                                    preg_match_all('/^([^\d]+)(\d+)/', $label, $match);
+                                    $rowId = $match[1][0];
+                                    $colId = $match[2][0];
+                                    ?>
+                                    <div class="print-container">
+                                        <div class="print_header">
+                                            <div class="print_logo"><img src="//tapetickets.com/public/assets/frontend/images/newlogo.svg" alt="" /></div>
+                                            <div class="print_event-name">Abu Dhabi Fashion Event</div>
+                                        </div>
+                                        <div class="print_details">
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Name:</div>
+                                                <div class="ticke_date_show"><?= $bookingData['FirstName']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Show Date:</div>
+                                                <div class="ticke_date_show"><?= $date; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Show Time:</div>
+                                                <div class="ticke_date_show"><?= $time; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Location:</div>
+                                                <div class="ticke_date_show"><?= $eventData['EventAddress']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Venue:</div>
+                                                <div class="ticke_date_show"><?= $eventData['EventVenueTitle']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Purchase Date:</div>
+                                                <div class="ticke_date_show"><?= $bookingData['BookingMadeDate']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Ticket Price:</div>
+                                                <div class="ticke_date_show"><?= $zonePrice; ?> AED</div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="bar_code"><img src="<?php echo $this->basePath() ?>/user/generatebarcode/<?= $Id['barCode']; ?>" /></div>
+                                                <div class="ticket-seat-outer">
+                                                    <div class="ticket_seat">
+                                                        Seat
+                                                        <span><?= $rowId . '/' . $colId; ?></span>
+                                                    </div>
+                                                    <div class="ticket_seat">
+                                                        Zone
+                                                        <span><?= ucwords($zoneTitle); ?></span>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                </div>
+                                            </div>
+                                            <div class="booking_id">
+                                                Booking ID: <strong>#<?= $bookingData['orderId']; ?></strong>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_image">
+                                            <img src="<?php echo $this->basePath() ?>/uploads/event/<?= $eventData['EventImageMedium']; ?>" alt="" />
+                                        </div>
+                                        <div class="clear"></div>
+                                        <div class="tickets_contents">
+                                            <div class="print_content-left">
+                                                <h3>Highlights:</h3>
+                                                <ul>
+                                                    <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                    <li>Lorem Ipsum has been the industry's standard dummy </li>
+                                                    <li>text ever since the 1500s, when an unknown printer took a galley of type and </li>
+                                                    <li>scrambled it to make a type specimen book. It has survived not only five centuries, </li>
+                                                    <li>but also the leap into electronic typesetting, remaining </li>
+                                                    <li>essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing </li>
+                                                    <li>Lorem Ipsum passages, and more recently with desktop </li>
+                                                    <li>publishing software like Aldus PageMaker including versions</li>
+                                                    <li> Lorem Ipsum.
+
+                                                        It is a long established fact that a reader will be </li>
+                                                    <li>distracted by the readable content of a page when looking at its layout. </li>
+                                                    <li>The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,</li>
+                                                    <li> as opposed to using 'Content here, content here', making it look like readable English. </li>
+                                                    <li>Many desktop publishing packages and web page editors now use</li>
+                                                </ul>
+                                            </div>
+                                            <div class="print_content-right">
+                                                <h3>Fine Print:</h3>
+                                                <ul>
+                                                    <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                    <li>Lorem Ipsum has been the industry's standard dummy </li>
+                                                    <li>text ever since the 1500s, when an unknown printer took a galley of type and </li>
+                                                    <li>scrambled it to make a type specimen book. It has survived not only five centuries, </li>
+                                                    <li>but also the leap into electronic typesetting, remaining </li>
+                                                    <li>essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing </li>
+                                                    <li>Lorem Ipsum passages, and more recently with desktop </li>
+                                                    <li>publishing software like Aldus PageMaker including versions</li>
+                                                    <li> Lorem Ipsum.
+
+                                                        It is a long established fact that a reader will be </li>
+                                                    <li>distracted by the readable content of a page when looking at its layout. </li>
+                                                    <li>The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,</li>
+                                                    <li> as opposed to using 'Content here, content here', making it look like readable English. </li>
+                                                    <li>Many desktop publishing packages and web page editors now use</li>
+                                                </ul>
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="ticket_footer">
+                                                Fon any inquiry you can contact us on +971 565555222 &amp; +971 565522522<br/>
+                                                Email: support@tapetickets.com &amp; follow us on Twitter | Facebook
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+                            <?php
+                        }
+                        ?>
+                    </div><!--/ticket-preview-->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <div class="tickets-details">
+                        <h3 class="heading-blue">ticket details</h3>
+                        <h4 class="heading-18"><?= $eventData['EventName'] ?> </h4><h4><span class="text-gray"><?= $eventData['EventDesc']; ?></span></h4>
+                        <span class="block bold">
+                            <?php
+                            echo $date . "&nbsp;&nbsp;•&nbsp;&nbsp;" . $time; //April 16, 2015  •  09:00 PM 
+                            ?>
+                        </span>
+                    </div><!--/ticket details-->
+                    <h3 class="heading-blue">order summary</h3>
+                    <ul class="order-summary">
+                        <?php
+                        foreach ($seatsData as $row) {
+                            $i = 0;
+                            $zoneTitle = $row->zoneTitle;
+                            $zonePrice = $row->zonePrice;
+                            ?>
+                            <li class="block bold"><label>Zone</label><?= ucwords($zoneTitle); ?></li>
+                            <li><label>Price</label><?= $zonePrice; ?> AED <span class="text-gray">each</span></li><?php ?><li class="block bold"><label>Seat</label><?php
+                                foreach ($row->seatIds as $Id) {
+                                    $label = explode("_", $Id['seatLabel'])[1];
+                                    preg_match_all('/^([^\d]+)(\d+)/', $label, $match);
+                                    $rowId = $match[1][0];
+                                    $colId = $match[2][0];
+                                    $i++;
+                                    ?><?= $rowId . '/' . $colId; ?>,&nbsp;<?php }
+                                ?></li>
+                            <li class="block bold"><label>Quantity</label>x <?= $i; ?> tickets</li><hr><?php
+                        }
+                        ?>
+                        <li><label>Payed with</label></li>
+                        <li><?= $bookingData['CardNo']; ?></li>
+                    </ul>
+                    <div class="total-aed"><span class="text-gray">Total</span><?= $bookingData['totalAmount']; ?> AED</div>        
+                </div><!--/sidebar-->
+            </div>
+            <?php
+        }
+        ?>
+    </div><!--/row-->
+</div><!--/main-->

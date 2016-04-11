@@ -1,0 +1,79 @@
+<h2 class="text-center heading"><span>New upcoming events </span></h2>
+<?php echo $this->flashMessenger()->render('success', array('alert alert-success')); ?>
+<?php $commonViewHelper = $this->Commonviewhelper(); ?>
+  <div class="row" id="upcoming-events">
+  <?php if(!empty($nearbyEvents)){ 
+    foreach($nearbyEvents as $event){ ?>
+    <div class="col-md-4 col-sm-4">
+      <div class="img-wrapper"> <img src="<?php echo $this->basePath('/uploads/event/'.$event->getEventImageMedium());?>" alt="">
+        <div class="overlay">
+          <div class="overlay-contents">
+            <h4><?php echo $event->getEventName(); ?><span><?php echo $event->getEventVenueTitle(); ?></span></h4>
+            <p class="post-by text-blue">
+                <span class="pull-right"><img width="22" height="25" src="<?php echo $this->basePath('/uploads/category/'.$event->getCategory()->getIcon()); ?>" /></span>
+                <?php echo $commonViewHelper->getDateTimeForEventsListing($event); ?>
+            </p>
+          </div>
+        </div>
+        <!--/overlay-->
+        <div class="hover-overlay">
+          <div class="hover-content"><img src="<?php echo $this->basePath('/assets/frontend/images/img-hover-logo.png');?>" alt=""><br>
+            <!-- changes by Sathish - 2016/01/25 -->
+            <!--span class="hover_buy">Buy Tickets</span --> 
+            <span class="hover_buy">Coming Soon</span> 
+          </div>
+          <!-- changes by Sathish - 2016/01/25 -->
+          <!--a class="detail_link-overlay" href="<?php echo $this->url('eventdetail', array('eventId' => $event->getId())); ?>"></a -->
+          <a class="detail_link-overlay" href="#"></a>
+        </div>
+        <!--/hover-overlay--> 
+      </div>
+    </div>
+   <?php } 
+   } else { ?>
+      <div class="noevent" style="font-size: 18px;text-align:center"><strong>No Upcoming Events found at your nearby location.</strong></span></div>
+  <?php } ?>
+   </div>
+   <div>
+<?php
+$date = date("m/d/Y");
+// set current date
+
+// parse about any English textual datetime description into a Unix timestamp 
+$ts = strtotime($date);
+// calculate the number of days since Monday
+$dow = date('w', $ts);
+$offset = $dow - 1;
+if ($offset < 0) {
+    $offset = 6;
+}
+// calculate timestamp for the Monday
+$ts = $ts - $offset*86400;
+$Current = Date('N');
+$DaysToSunday = 8 - $Current;
+$DaysFromMonday = $Current - 0;
+$nextday = Date('m/d/Y', StrToTime("+ {$DaysToSunday} Days"));
+$previousday = Date('m/d/Y', StrToTime("- {$DaysFromMonday} Days"));
+?>
+<a href="eventsday/weekday/<?= $previousday ?>" class="prev_day" title="Previous Day" >Previous</a>
+<?php
+// loop from Monday till Sunday 
+for ($i = 0; $i < 7; $i++, $ts += 86400){
+    echo '|<a href="eventsday/weekday/'.date("Y-m-d", $ts).'" class="next_day" title="Next Day" >'.date("m/d/Y l", $ts).'</a>|&nbsp;&nbsp;';
+}
+?>
+<a href="eventsday/weekday/<?= $nextday ?>" class="next_day" title="Next Day" >Next</a>
+<?php
+$data = array();
+$today    = getdate();
+$firstDay = getdate(mktime(0,0,0,$today['mon'],1,$today['year']));
+$lastDay  = getdate(mktime(0,0,0,$today['mon']+1,0,$today['year']));
+
+$previous = date("Y-m", strtotime("-1 months"));
+$current = date("Y-m");
+$next = date("Y-m", strtotime("+1 months"));
+?>
+<br/>
+Month:
+<a href="eventsday/month/<?php echo $previous;?>">Previous Month</a> | <a href="eventsday/month/<?php echo $current;?>"><?php echo $current;?></a> | <a href="eventsday/month/<?php echo $next;?>">Next Month</a>
+</div>

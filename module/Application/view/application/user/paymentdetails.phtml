@@ -1,0 +1,182 @@
+<h2 class="heading42"><span><?php echo $username; ?></span></h2>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation"><a href="<?php echo $this->url('my-event') ?>">My Events</a></li>
+    <li role="presentation"><a href="<?php echo $this->url('order-history') ?>">Order History</a></li>
+    <li role="presentation" class="active"><a href="<?php echo $this->url('payment-details') ?>" aria-controls="Payment Details" role="tab" data-toggle="tab">Payment Details</a></li>
+    <li role="presentation"><a href="<?php echo $this->url('userprofile') ?>">Settings</a></li>
+</ul>
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="payment-details">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="method editcard">
+            <div class="alert alert-success fade in" style="display:none"></div>
+            <div class="alert alert-danger fade in" style="display:none"></div>
+          <h5>Payment Method</h5>
+          <!--<img src="images/img-payments.png" alt="">-->
+          <form id="editcard">
+              <div class="form-group">
+              <select id="savedcard" class="form-control" name="card">             
+              <option value="">Select Card</option>
+              <?php
+              foreach($this->savedcard as $key=>$val){
+                  echo "<option value=".$key.">".$val."</option>";
+              }              
+              ?>
+            </select> 
+              </div>
+            <input type="hidden" value="" id="cardid" name="cardid">
+            <div class="form-group">
+                <input type="radio" value="visa" id="cardtype" class="cardtype" name="card_type"> <img src="<?php echo $this->basePath() ?>/assets/frontend/icons/icon-visa.png" />
+                <input type="radio" value="amex" class="cardtype" name="card_type"><img src="<?php echo $this->basePath() ?>/assets/frontend/icons/img-american-express.png" />
+                <input type="radio" value="mastercard" class="cardtype" name="card_type"><img src="<?php echo $this->basePath() ?>/assets/frontend/icons/img-master-card.png" />
+                <input type="radio" class="cardtype" value="maestro" name="card_type"><img src="<?php echo $this->basePath() ?>/assets/frontend/icons/img-maestro.png" />
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control title" name="title" placeholder="Title" disabled="disabled" value="">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control cardno" name="card_no"  placeholder="Card Number" disabled="disabled" value="">
+            </div>
+            <div class="form-group">
+              <div class="row">                    
+                <div class="col-md-12">
+                  <div class="media">
+                    <div class="media-left"> EXP. </div>
+                    <div class="media-body">
+                      <input type="number" class="form-control month" min=1 max=12 name="month" placeholder="MM" value="" disabled="disabled">
+                      <input type="number" class="form-control year"  min=<?php echo date("Y"); ?>  max=<?php echo date("Y")+10; ?> name="year" placeholder="YYYY" value="" disabled="disabled">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="userid" value="" id="userid">
+            <button type="submit" class="btn-blue" id="updatecard">update</button>
+          </form>
+        </div>
+        <!--/Payment Method-->
+
+        <div class="method billingdetails">   
+            <div class="alert alert-success fade in" style="display:none"></div>
+            <div class="alert alert-danger fade in" style="display:none"></div>
+            <?php echo $this->partial('userbillinginfo.phtml', array('form' => $this->billinginfo,'action' => $this->url('userbillinginfo')));?>       
+        </div>
+        <!--/Payment Method-->
+
+        <button type="submit" class="btn-blue addcard">+ Add card</button>
+        <div class="method cardform">   
+            <div class="alert alert-success fade in" style="display:none"></div>
+            <div class="alert alert-danger fade in" style="display:none"></div>
+            <?php echo $this->partial('usercardinfo.phtml', array('form' => $this->usercardinfo,'action' => $this->url('usercardinfo')));?>       
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    jQuery(".addcard").click(function(e){
+        $( ".newcardform" ).slideDown( "slow", function() {
+            console.log("Div opened");
+        });
+    });
+    jQuery("#savedcard").change(function(e){        
+        var activecard = this.value;
+        $('#editcard #cardid').val(activecard);        
+        var url = FULL_URL_PATH+"getcarddetails/"+activecard;        
+       $.post(url, function(response){
+            var obj = jQuery.parseJSON( response );
+            var status = obj.status;                        
+            if(status == 1){
+                $("#editcard .title").val(obj.card.title);
+                $('#editcard input').prop("disabled", false);
+                $("#editcard .cardno").val(atob(obj.card.cardno));
+                $("#editcard .month").val(obj.card.month);
+                $("#editcard .year").val(obj.card.year);           
+                $("#editcard input[name=card_type][value=" + obj.card.cardtype + "]").attr('checked', 'checked');                
+            }else if(status == -1){                               
+                //alert(msg);
+                window.location = '<?php echo $this->url('home') ?>';
+            }else{
+                $(".cardform .alert-error").html(msg);
+                $(".cardform .alert-error").show();
+                setTimeout(function() {
+                    $(".cardform .alert-error").hide('blind', {}, 500)
+                }, 5000);
+                $(".cardform .alert-success").hide();                                    
+            }            
+        });
+    });   
+    
+    $( document ).ready(function() {        
+        $('#editcard input').prop("disabled", "disabled");
+	$("#editcard").validate({
+		errorClass:'validation-error',
+		rules: {
+                        card:{required:true},
+			card_type:{required:true },
+			card_no:{ maxlength:16,required:true},			
+                        title:{required: true,htmltags:true },
+                        month:{required:true,positiveNumber:true},
+                        year:{required:true,positiveNumber:true}        
+		},
+                messages: {
+                        card:{
+                            required: "Please select saved card"
+                        },
+                        card_type:{                                                             
+                                required: "Please select card type"
+			},  
+			card_no:{
+                                maxlength : "Card Number cannot exceed 16 Characters",
+				htmltags: "HTML Tags not supported",
+                                required: "Please enter card number"
+                       },
+                       title:{                                
+				htmltags: "HTML tags not supported",
+                                required: "Please enter unique title for your saved card"
+                       },
+                       month:{
+                                required: "Please select expiry month of card",
+                                positiveNumber: "Please check card expiry month"
+                       },
+                       year:{
+                                required: "Please select expiry year of card",
+                                positiveNumber:" Please check card expiry year"
+                       }
+                },
+		submitHandler: function(form) {
+			$("#usercardinfo .alert-danger").hide();
+                        var formData = $("#editcard").serialize();        
+                        var url = FULL_URL_PATH+"user/updatecard/";
+                        $.post(url, formData, function(response){
+                            var obj = jQuery.parseJSON( response );
+                            var status = obj.status;
+                            var msg = obj.msg;                                  
+                            if(status == 1){
+                                $(".editcard .alert-error").hide();
+                                $(".editcard .alert-success").show();
+                                $(".editcard .alert-success").html(msg);                           
+                                $('#editcard').find("input[type=text],input[type=radio],input[type=radio],textarea").val("");
+                                $('#editcard input').prop("disabled", "disabled");
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 2000);            
+                            }else{
+                                $(".editcard .alert-error").html(msg);
+                                $(".editcard .alert-error").show();
+                                $(".editcard .alert-success").hide();                                    
+                            }
+                        });
+		}                
+	});
+        $.validator.addMethod("htmltags", checkHTMLTags); 
+        $.validator.addMethod('positiveNumber',
+    function (value) { 
+        return Number(value) > 0;
+    }, 'Enter a positive number.');
+    });
+</script>
+<style>
+#editcard img{padding-left:5px;}    
+</style>

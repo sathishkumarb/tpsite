@@ -1,0 +1,43 @@
+<h2 class="heading42"><span><?php echo $name; ?></span></h2>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation"><a href="<?php echo $this->url('my-event') ?>">My Events</a></li>
+    <li role="presentation" class="active"><a href="<?php echo $this->url('order-history') ?>" >Order History</a></li>
+   <!-- <li role="presentation"><a href="<?php echo $this->url('payment-details') ?>">Payment Details</a></li>-->
+    <li role="presentation"><a href="<?php echo $this->url('userprofile') ?>" role="tab">Settings</a></li>
+</ul>
+<div class="tab-content">
+    <div role="tabpanel" id="order-history">
+        <div class="order-history">
+            <ul>
+                <?php
+                if (count($this->booking_history) > 0) {
+                    foreach ($this->booking_history as $booking) {
+                        $card_no = substr_replace($booking['card'], 'xxxx xxxx xxxx ', 0, 12);
+                        ?>
+                        <li>
+                            <div class="row-content">
+                                <div class="select-date">
+                                    <div class="blue-bg"> <span class="date-time"><i class="fa fa-calendar-o"></i></span> <?php echo $booking['event_date']->format('M d, Y'); ?> </div>
+                                </div>
+                                <div class="title-wrapper">
+                                    
+                                    <h4><?php echo $booking['event_name'] ?><span><?php echo $booking['tickets']; ?> tickets</span></h4>
+                                </div>
+                                <div class="order-wrapper">
+                                    <div class="media">
+                                        <div class="media-body"> Order ID <span class="order-id"> #<?php echo $booking['orderid'] ?></span> </div>
+                                        <div class="media-body aed-wrap"> <span class="aed"><?php echo $booking['total_price'] ?> AED</span><?php echo $card_no; ?></div>
+                                    </div>
+                                    <!--/media--> 
+                                </div>
+                            </div>
+                        </li>
+                        <?php
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+        <!--/order-history-->         
+    </div>
+</div>

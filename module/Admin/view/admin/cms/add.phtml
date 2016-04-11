@@ -1,0 +1,154 @@
+<div class="row">
+    <div class="col-md-12 pad12">							
+        <div class="panel panel-default panel-block">
+            <div class="list-group">
+                <div class="list-group-item" id="masked-input-fields">
+                    <h4 class="section-title">Add CMS</h4>
+                    <?php echo $this->flashMessenger()->render('success', array('alert alert-success')); ?>
+                    <?php if (!empty($success)) { ?>
+                        <div class="alert alert-success fade in"><?php echo $success; ?></div>
+                    <?php } ?>
+                    <?php if (!empty($error)) { ?>
+                        <div class="alert alert-danger fade in"><?php echo $error; ?></div>
+                    <?php } ?>
+                    <?php
+                    $form->setAttribute('action', $this->url('addcms'));
+                    $form->setAttribute('class', "form-horizontal");
+                    $form->prepare();
+                    echo $this->form()->openTag($form);
+                    ?>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="cmsName">
+                            Page Title
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('cmstitle')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="content">
+                            Content
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('cmsdesc')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="keywords">
+                            Keywords
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('keywords')); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="metatag">
+                            Meta Tag
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('metatag')); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label" for="keywords">
+                            Meta Description
+                        </label>
+                        <div class="col-lg-8">								
+                            <?php echo $this->formRow($form->get('metadesc')); ?>
+                        </div>
+                    </div>
+                    <div class="btnaddriv">
+                        <div class="row show-grid">
+                            <div class="col-xs-6"><?php echo $this->formRow($form->get('submitbutton')); ?></div>
+                            <div class="col-xs-6"><button class="btn btn-default saveaddriv unpaistridt" type="button" onclick="window.location = '<?php echo $this->url('cmsindex') ?>';">Cancel</button></div>
+                        </div>                        
+                    </div>
+                    <?php echo $this->form()->closeTag(); ?>					
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php echo $this->headScript()->prependFile($this->basePath() . '/js/jquery.validate.js'); ?>
+<script>
+    jQuery(document).ready(function () {
+        jQuery("#addcms").validate({
+            errorClass: 'validation-error',
+            rules: {
+                cmstitle: {
+                    required: true,
+                    htmltags: true,
+                    maxlength: 60
+                },
+                cmsdesc: {required: true},
+                keywords: {
+                    required: true,
+                    htmltags: true
+                },
+                metatag: {
+                    required: true,
+                    htmltags: true
+                },
+                metadesc: {
+                    required: true,
+                    htmltags: true
+                },
+            },
+            messages: {
+                'cmstitle': {
+                    required: "Please enter CMS Title",
+                    htmltags: "HTML Tags are not allowed",
+                    maxlength: "CMS Title should not exceed 60 chracters"
+                },
+                'cmsdesc': {
+                    required: "Please enter CMS Description"
+                },
+                'keywords': {
+                    required: "Please enter CMS Keywords",
+                    htmltags: "HTML Tags are not allowed"
+                },
+                'metatag': {
+                    required: "Please enter CMS Metatags",
+                    htmltags: "HTML Tags are not allowed"
+                },
+                'metadesc': {
+                    required: "Please enter CMS Meta Description",
+                    htmltags: "HTML Tags are not allowed"
+                },
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+        /**
+         * This function check html tags in field value
+         * @Author Vinod Kandwal
+         */
+        jQuery.validator.addMethod("htmltags", function checkHTMLTags(value, element, params) {
+            if (value.match(/([\<])([^\>]{1,})*([\>])/i) == null) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    });
+</script>
+<script>
+    tinyMCE.init({
+        selector: 'textarea',
+        theme: "modern",
+        mode: "exact",
+        elements: "template",
+        width: "580",
+        height: "200",
+        plugins: "paste, table, code",
+        theme_modern_resizing: true,
+        theme_modern_resizing_use_cookie: false,
+        theme_modern_toolbar_location: "top",
+        theme_modern_buttons1: "formatselect, bold, italic, underline, strikethrough, |, justifyleft, justifycenter, justifyright, justifyfull, |, bullist, numlist, |, outdent, indent, blockquote, |, undo, redo, cleanup, removeformat, pasteword, code ",
+        theme_modern_buttons2: "link, unlink, anchor, |, image, hr , sub, sup, charmap, |, forecolor, backcolor, |, tablecontrols",
+        theme_modern_buttons3: "",
+        theme_modern_blockformats: "p,h1,h2,h3,blockquote,dt,dd"
+    });
+</script>  

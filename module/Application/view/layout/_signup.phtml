@@ -1,0 +1,288 @@
+<div id="fb-root"></div>
+<script>
+ window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '457610574437545',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.3'
+    });
+FB.Event.subscribe('auth.login', function(resp) {
+        window.location = '//www.tapetickets.com/public/';
+    });
+    // ADD ADDITIONAL FACEBOOK CODE HERE
+  };
+
+  (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id))
+            return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=908095799248587";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<style>
+    #loading-indicator {
+        position: absolute;
+        left: 210px;
+        top: 10px;
+    }
+</style>
+<div class="modal fade login-signup" id="signup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel">Sign Up</h4>
+            </div>
+            <div class="modal-body">
+
+                <?php
+                $form->setAttribute('action', "");
+                $form->prepare();
+                echo $this->form()->openTag($form);
+                ?>
+                <img src="<?php echo $this->basePath(); ?>/assets/frontend/images/ajax-loader.gif" id="loading-indicator" style="display:none" />
+                <div class="form-group sucmsg">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span id="signupsucssmsg" style="color:green; display: none;"></span>
+                            <span id="signuperrormsg" style="color:red; display: none;"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"> <em class="fa fa-user"></em>
+                            <?php echo $this->formRow($form->get('fname')); ?>
+                        </div>
+                        <!--/input-group--> 
+                    </div>
+                </div>                  
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"> <em class="icons icon-email"></em>
+                            <?php echo $this->formRow($form->get('email')); ?>
+                        </div>
+                        <!--/input-group--> 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"> <em class="icons icon-password"></em>
+                            <?php echo $this->formRow($form->get('password')); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"> <em class="icons icon-password"></em>
+                            <?php echo $this->formRow($form->get('confirmpassword')); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <?php echo $this->formRow($form->get('signup')); ?>
+                    <p>Already a member? <a href="#" data-target="#login" data-toggle="modal" data-dismiss="modal">Log In</a></p>
+                </div>
+                <!--/form-->
+                <?php echo $this->form()->closeTag(); ?>
+                <div class="or-section"> <span>or</span></div>
+                <p class="text-center">
+                    <a href="javascript:void(0);" onclick="Login();">Connect with Facebook</a>
+                </p>
+                <script type="text/javascript">
+                    /*    
+                     function checkLoginState() {
+                     // This function is called when someone finishes with the Login
+                     // Button.
+                     FB.getLoginStatus(function(response) {
+                     statusChangeCallback(response);
+                     });
+                     }
+                     /*
+                     function statusChangeCallback(response) {
+                     console.log('statusChangeCallback');
+                     console.log(response);
+                     // The response object is returned with a status field that lets the
+                     // app know the current login status of the person.
+                     // Full docs on the response object can be found in the documentation
+                     // for FB.getLoginStatus().
+                     if (response.status === 'connected') {
+                     // Logged into your app and Facebook.
+                     var uid = response.authResponse.userID;
+                     var accessToken = response.authResponse.accessToken;
+                     testAPI();
+                     } else if (response.status === 'not_authorized') {
+                     // The person is logged into Facebook, but not your app.
+                     //document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
+                     alert('Please log into this app.');
+                     } else {
+                     // The person is not logged into Facebook, so we're not sure if
+                     // they are logged into this app or not.
+                     /* document.getElementById('status').innerHTML = 'Please log ' +
+                     'into Facebook.';*/
+                    // alert('Please log into Facebook');
+                    /*     }
+                     }*/
+                    function Login() {
+                        FB.login(function (response) {
+                            if (response.authResponse) {
+                    FB.api('/me?fields=email,name', function (response) {
+                                    //console.log('Successful login for: ' + response.name);
+                                    //console.log('Successful login for: ' + response.email);
+                                    //console.log('Successful login for: ' + response.id);
+                                    /*
+                                     var ajaxRequest = new XMLHttpRequest();
+                                     ajaxRequest.onreadystatechange = function() {
+                                     if(ajaxRequest.readyState === 4) {
+                                     console.log(ajaxRequest.responseText);
+                                     }
+                                     };
+                                     //send with POST
+                                     ajaxRequest.open('POST',FULL_URL_PATH+'index/connect',true);
+                                     ajaxRequest.setRequestHeader('Content-type','application/x-www-form-urlencoded'); //like a form
+                                     ajaxRequest.send('name='+response.name+'&email='+response.email+'&id='+response.id);
+                                     */
+                                    $('#loading-indicator').show();
+                                    $.ajax({
+                                        url: FULL_URL_PATH + 'fbconnect',
+                                        data: {'name': response.name, 'email': response.email, 'id': response.id},
+                                        method: "POST",
+                                        success: function (data) {
+                                            $('#loading-indicator').hide();
+                                            if (data == 1) {
+                                                /* Force reload from server, if want to reload from cache remove true parameter */
+                                                location.reload(true);
+                                            }
+                                            else if (data == 2) {
+                                               location.reload(true);
+                                            } else {
+                                                alert('Some error occured');
+                                            }
+
+                                        }
+                                    });
+                                    // FB.api('/me/picture?type=normal', function (response) {
+                                    // document.getElementById("profileImage").setAttribute("src", response.data.url);
+                                    // });
+                                });
+                            } else {
+                                alert("Login attempt failed!");
+                            }
+                        }, {scope: 'email', return_scopes: true});
+                    }
+                    // Here we run a very simple test of the Graph API after login is
+                    // successful.  See statusChangeCallback() for when this call is made.
+                    /* function testAPI() {
+                     console.log('Welcome!  Fetching your information.... ');
+                     FB.api('/me', function(response) {
+                     console.log('Successful login for: ' + response.name);
+                     });
+                     }
+                     */
+                    $(document).ready(function () {
+                        signupvalidator = $("#usersignup").submit(function (e) {
+                            e.preventDefault();
+                        }).validate({
+                            // errorClass:'error-msg',
+                            rules: {
+                                fname: {
+                                    required: true,
+                                    htmltags: true,
+                                    maxlength: 50
+                                },
+                                email: {
+                                    required: true,
+                                    email: true,
+                                    htmltags: true,
+                                    checkuniqueemail: true,
+                                    maxlength: 60
+                                },
+                                password: {
+                                    required: true,
+                                    htmltags: true,
+                                    minlength: 6
+                                },
+                                confirmpassword: {
+                                    required: true,
+                                    htmltags: true,
+                                    equalTo: "#inputPassword1",
+                                    minlength: 6
+                                }
+                            },
+                            messages: {
+                                fname: {
+                                    required: "Please enter first name",
+                                    htmltags: "HTML tags are not allowed",
+                                    maxlength: "First name should not exceed 50 characters"
+                                },
+                                email: {
+                                    required: "Please enter e-mail",
+                                    email: "Please enter valid e-mail",
+                                    htmltags: "HTML tags not allowed",
+                                    checkuniqueemail: "Email already exist"
+                                },
+                                password: {
+                                    required: "Please enter password",
+                                    htmltags: "HTML tags not allowed",
+                                    minlength: "Password should be atleast 6 characters"
+                                },
+                                confirmpassword: {
+                                    required: "Please enter confirm password",
+                                    htmltags: "HTML tags not allowed",
+                                    minlength: "Confirm passwords should be atleast 6 characters",
+                                    equalTo: "Password and confirm passwords do not match"
+                                }
+                            },
+                            submitHandler: function (form) {
+                                var formData = $("#usersignup").serialize();
+//                                formData = JSON.stringify(formData);
+                                jQuery.ajax({
+                                    type: 'POST',
+                                    url: '<?php echo $this->basePath() ?>/index/ajaxsignup',
+                                    dataType: 'json',
+                                    data: {formData},
+                                    success: function (response) {
+                                        if (response.status === 'success') {
+                                            jQuery('form#usersignup')[0].reset();
+                                            jQuery('span#signupsucssmsg').text(response.msg);
+                                            jQuery('span#signupsucssmsg').show();
+                                            jQuery('#signup').delay(3000).modal('hide');
+                                            jQuery('#login').modal('show');
+                                        } else {
+                                            jQuery('span#signuperrormsg').text(response.msg);
+                                            jQuery('span#signuperrormsg').show().delay(3000).hide();
+                                        }
+                                    }
+                                });
+//                                $.post('<//?php echo $this->basePath() ?>/index/ajaxsignup', formData, function (response) {
+//                                    var obj = jQuery.parseJSON(response);
+//                                    var status = obj.status;
+//                                    var msg = obj.msg;
+//                                    if (status == 1) {
+//                                        window.location = '<?//php echo $this->url('userprofile') ?>';
+//                                    } else if (status == 2) {
+//                                        window.location = obj.reffererUrl;
+//                                    } else {
+//                                        $("#signup .alert-danger").html(msg);
+//                                        $("#signup .alert-danger").show();
+//                                    }
+//                                });
+                                //form.submit();
+                                //return true;
+                            }
+                        });
+                        $.validator.addMethod("htmltags", checkHTMLTags);
+                        jQuery.validator.addMethod("checkuniqueemail", checkUniqueEmail);
+
+                    });
+                </script>
+            </div>
+            <!--/modal-body--> 
+
+        </div>
+    </div>
+</div>

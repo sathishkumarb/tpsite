@@ -1,0 +1,230 @@
+<div class="container main mtop-55">
+    <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+
+    <link href="<?php echo $this->basePath('/assets/frontend/css/font-awesome.min.css'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo $this->basePath('/assets/frontend/css/theme-style.css'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo $this->basePath('/assets/frontend/css/custom-style.css'); ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo $this->basePath('/assets/frontend/css/print-preview.css'); ?>" rel="stylesheet" type="text/css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+    <script type="text/javascript">
+        var FULL_URL_PATH = '<?php echo $this->url('home', array(), array('force_canonical' => true)); ?>';
+        function Popup(data) {
+            var c = String(data);
+            var myWindow = window.open('', 'My Ticket', '');
+            myWindow.document.write('<html><head><title></title><link href="//fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Raleway:400,300,700" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/bootstrap.min.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/theme-style.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/custom-style.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/print-preview.css" rel="stylesheet" type="text/css"></head><body onload="printPage()">');
+            myWindow.document.write('<div class="container main"><div class="row"><div class="col-md-8"><div class="ticket-preview">');
+            myWindow.document.write(c);
+            myWindow.document.write('</div></div></div></div><scrip' + 't type="text/javascript">function printPage(){setTimeout(function(){window.print()},1000);}</sc' + 'ript></body></html>');
+            myWindow.document.close();
+            myWindow.focus();
+//            myWindow.print();
+//            myWindow.close();
+            return true;
+        }
+        function printTarget(id) {
+            var data = jQuery('#' + id).clone().html();
+            Popup(data);
+        }
+        
+        jQuery(document).ready(function(){
+            document.cookie = 'globTimer=""; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+            document.cookie = 'scheduleId=""; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+            document.cookie = 'seatsArray=""; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        });
+		function sendTicketEmail(){
+						
+            jQuery.ajax({
+                type: "POST",
+                url: "/public/user/sendticketemail",
+                data: {'bookingid': <?= $bookingData['orderId']; ?>},
+				dataType: "html",
+                success: function(retdata){
+					if(retdata){
+                    	console.log('ticket mail sent');
+					}
+                }
+            });
+        }
+    </script>
+    <div class="row">
+        <?php
+        if (!$status) {
+            ?><h2 class="heading">No Tickets found</h2><?php
+        } else {
+            ?>
+            <div class="col-md-8">
+                <div class="ticket-preview">
+                    <?php
+                    $date = date('F d, Y', strtotime($bookingData['EventDate']));
+                    $bookingDate = date('F d Y', strtotime($bookingData['BookingMadeDate']));
+                    $time = date('h:i A', strtotime($bookingData['EventTime']));
+                    if ($view) {
+                        ?><div class="success_message"> Your Order Id <?= $bookingData['orderId']; ?> payment is success.</div><?php
+                    }
+                    if ($error) {
+                        ?><div class="success_message"><?= $msg; ?></div><?php
+                    } else {
+                        ?>
+                        <h2 class="heading">
+                            <span>Ticket Preview</span>
+                            <button class="btn-blue pull-right" onclick="printTarget('printTickets')">Print Tickets</button>
+							<button class="btn-blue pull-left" onclick="sendTicketEmail()">Email Tickets</button>
+                        </h2>
+                        <div id="printTickets">
+                            <?php
+                            foreach ($seatsData as $row) {
+                                $zoneTitle = $row->zoneTitle;
+                                $zonePrice = $row->zonePrice;
+                                foreach ($row->seatIds as $Id) {
+                                    $label = explode("_", $Id['seatLabel'])[1];
+                                    preg_match_all('/^([^\d]+)(\d+)/', $label, $match);
+                                    $rowId = $match[1][0];
+                                    $colId = $match[2][0];
+                                    ?>
+                                    <div class="print-container">
+                                        <div class="print_header">
+                                            <div class="print_logo"><img src="//tapetickets.com/public/assets/frontend/images/newlogo.svg" alt="" /></div>
+                                            <div class="print_event-name">Abu Dhabi Fashion Event</div>
+                                        </div>
+                                        <div class="print_details">
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Name:</div>
+                                                <div class="ticke_date_show"><?= $bookingData['FirstName']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Show Date:</div>
+                                                <div class="ticke_date_show"><?= $date; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Show Time:</div>
+                                                <div class="ticke_date_show"><?= $time; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Location:</div>
+                                                <div class="ticke_date_show"><?= $eventData['EventAddress']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Venue:</div>
+                                                <div class="ticke_date_show"><?= $eventData['EventVenueTitle']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Purchase Date:</div>
+                                                <div class="ticke_date_show"><?= $bookingData['BookingMadeDate']; ?></div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="ticke_date-label">Ticket Price:</div>
+                                                <div class="ticke_date_show"><?= $zonePrice; ?> AED</div>
+                                            </div>
+                                            <div class="ticke_date-preview">
+                                                <div class="bar_code"><img src="<?php echo $this->basePath() ?>/user/generatebarcode/<?= $Id['barCode']; ?>" /></div>
+                                                <div class="ticket-seat-outer">
+                                                    <div class="ticket_seat">
+                                                        Seat
+                                                        <span><?= $rowId . '/' . $colId; ?></span>
+                                                    </div>
+                                                    <div class="ticket_seat">
+                                                        Zone
+                                                        <span><?= ucwords($zoneTitle); ?></span>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                </div>
+                                            </div>
+                                            <div class="booking_id">
+                                                Booking ID: <strong>#<?= $bookingData['orderId']; ?></strong>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_image">
+                                            <img src="<?php echo $this->basePath() ?>/uploads/event/<?= $eventData['EventImageMedium']; ?>" alt="" />
+                                        </div>
+                                        <div class="clear"></div>
+                                        <div class="tickets_contents">
+                                            <div class="print_content-left">
+                                    <h3>Terms:</h3>
+                                      <ul>
+                                        <li>All tickets are the property of the Organiser. You Must return any ticekt you hold to us or our representative if we ask you to do do so.</li>
+                                            <li>We may: [A] add, withdraw, reschedule or substitute artists and/or vary advertised programs, prices, venues, seating arrangements and audience capacity; [B] delay/cancel an event; [C] exercise our rights under paragraph 2 above, in each case at our sole discretion, at short notice and without issuing a refund or any other compensation. </li>
+                                            <li>You and your belongings may be searched at the venue at any time and an ID check carried out.We are entitled to deny you entry at the venue if you: [A] are under 18 years old; [B] cannot produce original Identification, such as a passport, driving license or UAE identity card; or [C] pose or may pose a risk to yourself or any other person (in our sole opinion), in each case without refund or other compensation.</li>
+                                            <li>You must not bring into the venue: [A] any alcohol, food, beverage, bottle, container or furniture; [B] any professional camera or other recording equipment; [C] animals; [D] any item that could be used as a weapon; [E] fireworks, laser pointers, strobe lights, musical instruments, and/or amplification equipment; [F] any other object which we or Venue security personnel consider presents a security risk or may be used to damage the Venue or interfere with the Event.</li>
+                                            <li>Attendance is at your sole risk. By attending the venue you waive any claims you have or may have against the Organiser, Venue management, the Venue, the artist and each member of such persons’ families, affiliated entities, agents, officers, directors, owners and employees, for personal injury, loss or damage to property (including any vehicle in the car park) or death (in each case, however occurring, and to the fullest extent permissible by law).</li>
+                                         </ul>    
+
+                                    </div>
+                                    <div class="print_content-right">
+                                        <ul>                                  
+                                            <li>You consent to photography, filming and sound recording which may include you as an attendee at the venue and its use in commercial distribution without payment or copyright.</li>
+                                            <li>You represent and warrant that the ticket is for personal use only. This ticket is non-transferable andnon-exchangeable. We can confiscate a ticket from you if you resell it or attempt to resell at a price higher than the face value. We are not obliged to admit to the Venue any person holding a damaged or split ticket, or whose ticket has been lost or stolen. If you fail to produce a valid ticket on demand, we are entitled to require that you leave the Venue. If you leave the Ticket Only area for any reason you will not be readmitted. Please note that you are not entitled any refund or compensation in any such circumstances.</li>
+                                            <li>We are not responsible for the content of any performance.</li>
+                                            <li>This show is rated as PG (parental Guidance). </li>
+                                            <li>Guests Must remain quiet during the show,</li>
+                                            <li>Photography is NOT allowed. </li>
+                                            <li>Professional cameras are not allowed in the venue unless authorized by the organizer through badge or wristband.</li>
+                                            <li>Doors will be closed 15 in before every show.</li>
+                                            <li>Use of mobile phones during the show is not permitted.</li>
+                                            <li>Copy of Photo ID card Must Be Presented at the entry.</li>
+                                            <li>Tickets Re-Sell Is no permitted, Resold tickets will be deactivated and will not permit entry.</li>
+                                            <li><strong>This ticket is non-refundable, non-returnable and cannot be exchanged.By making a purchase you expressly agree to be found by this condition.</strong></li>
+                                    </div>
+                                            <div class="clear"></div>
+                                            <div class="ticket_footer">
+                                                Fon any inquiry you can contact us on +971 565555222 &amp; +971 565522522<br/>
+                                                Email: support@tapetickets.com &amp; follow us on Twitter | Facebook
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+                            <?php
+                        }
+                        ?>
+                    </div><!--/ticket-preview-->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <div class="tickets-details">
+                        <h3 class="heading-blue">ticket details</h3>
+                        <h4 class="heading-18"><?= $eventData['EventName'] ?> </h4><h4><span class="text-gray"><?= $eventData['EventDesc']; ?></span></h4>
+                        <span class="block bold">
+                            <?php
+                            echo $date . "&nbsp;&nbsp;•&nbsp;&nbsp;" . $time; //April 16, 2015  •  09:00 PM 
+                            ?>
+                        </span>
+                    </div><!--/ticket details-->
+                    <h3 class="heading-blue">order summary</h3>
+                    <ul class="order-summary">
+                        <?php
+                        foreach ($seatsData as $row) {
+                            $i = 0;
+                            $zoneTitle = $row->zoneTitle;
+                            $zonePrice = $row->zonePrice;
+                            ?>
+                            <li class="block bold"><label>Zone</label><?= ucwords($zoneTitle); ?></li>
+                            <li><label>Price</label><?= $zonePrice; ?> AED <span class="text-gray">each</span></li><?php ?><li class="block bold"><label>Seat</label><?php
+                                foreach ($row->seatIds as $Id) {
+                                    $label = explode("_", $Id['seatLabel'])[1];
+                                    preg_match_all('/^([^\d]+)(\d+)/', $label, $match);
+                                    $rowId = $match[1][0];
+                                    $colId = $match[2][0];
+                                    $i++;
+                                    ?><?= $rowId . '/' . $colId; ?>,&nbsp;<?php }
+                                ?></li>
+                            <li class="block bold"><label>Quantity</label>x <?= $i; ?> tickets</li><hr><?php
+                        }
+                        ?>
+                        <li><label>Payed with</label></li>
+                        <li><?= $bookingData['CardNo']; ?></li>
+                    </ul>
+                    <div class="total-aed"><span class="text-gray">Total</span><?= $bookingData['totalAmount']; ?> AED</div>        
+                </div><!--/sidebar-->
+            </div>
+            <?php
+        }
+        ?>
+    </div><!--/row-->
+</div><!--/main-->

@@ -1,0 +1,108 @@
+<div class="row">
+	<div class="col-md-12 pad12">
+							
+		<div class="panel panel-default panel-block">
+			<div class="list-group">
+				<div class="list-group-item" id="masked-input-fields">
+					<h4 class="section-title">Edit Category</h4>
+					<?php echo $this->flashMessenger()->render('success', array('alert alert-success')); ?>
+					<?php if(!empty($success)) {  ?>
+                                        <div class="alert alert-success fade in"><?php echo $success; ?></div>
+                                        <?php } ?>
+                                            <?php if(!empty($error)) { ?>
+					<div class="alert alert-danger fade in"><?php echo $error; ?></div>
+				<?php } ?>
+					<?php
+						$form->setAttribute('action', $this->url('editcategory',array('catid'=>$catid)));
+						$form->setAttribute('class', "form-horizontal");
+						$form->prepare();
+						echo $this->form()->openTag($form);
+					?>
+						<div class="form-group">
+							<label class="col-lg-4 control-label" for="categoryName">
+							   Category Name
+							</label>
+							<div class="col-lg-8">								
+								<?php echo $this->formRow($form->get('catname')); ?>
+							</div>
+                                                </div>                                                
+                                                <div class="form-group">
+                                                        <label class="col-lg-4 control-label" for="categoryName">
+							   Category Icon
+							</label>
+							<div class="col-lg-8">								
+                                                            <img src="<?php echo $this->basePath(); ?>/uploads/category/<?php echo $imgpath; ?>" width="50" height="50" style="float:left;margin-right:100px;" />
+								<?php                                                                    
+                                                                echo $this->formRow($form->get('fileupload'));    ?>							
+                                                        </div>
+                                                        </div>												
+						<div class="btnaddriv">
+                                                    <div class="row show-grid">
+                                                        <div class="col-xs-6"><?php echo $this->formRow($form->get('submitbutton')); ?></div>
+                                                        <div class="col-xs-6"><button class="btn btn-default saveaddriv unpaistridt" type="button" onclick="window.location ='<?php echo $this->url('categoryindex') ?>';">Cancel</button></div>
+                                                    </div>
+						</div>
+					
+					<?php echo $this->form()->closeTag(); ?>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php echo $this->headScript()
+			->prependFile($this->basePath() . '/js/jquery.validate.js'); ?>
+<script>
+$( document ).ready(function() {
+	jQuery.validator.setDefaults({            
+            success: "valid"
+        });
+	$("#editcat").validate({
+		errorClass:'validation-error',
+		rules: {				
+			catname:{ 
+                            required: true,
+                            htmltags: true,
+                            maxlength: 50                            
+                        },
+                        fileupload:{                          
+                            extension: "jpg|jpeg|gif|bmp|png"
+                        },
+		},
+        messages: {           
+			'catname' : {
+                                required: "Please enter Category Name",
+                                htmltags: "html tags not allowed",
+                                maxlength: "Category Name cannot be greater than 60 characters"
+                        },	
+                        'fileupload' : {                                                                
+                                extension: "Only jpg,gif,png,bmp extensions are supported."
+                        },			
+        },
+		submitHandler: function(form) {
+			form.submit();
+		}/*,
+		errorPlacement: function(error, element){
+			if (element.attr("name") == "confnewpass")
+			{
+				error.insertAfter("#groupconfpassword");
+			} else if (element.attr("name") == "oldpassword") {
+				error.insertAfter( "#groupoldpassword" );
+			} else {
+				error.insertAfter( "#grouppassword" );
+			}
+		}	*/
+	});
+        /**
+		 * This function check html tags in field value
+		 * @Author Vinod Kandwal
+		 */
+		jQuery.validator.addMethod("htmltags", function checkHTMLTags(value, element, params) { 
+			if(value.match(/([\<])([^\>]{1,})*([\>])/i)==null){
+				return true;
+			}else{
+				return false;
+			}
+		});
+});
+</script>

@@ -1,0 +1,138 @@
+<html><head><style>body{margin:0; padding:0;}
+
+.print-container{display:block; margin:0 auto; width:800px; padding:30px;}
+.print_header{display:block; padding-bottom:20px;}
+.print_logo{display:table-cell; vertical-align:middle; padding-right:50px;}
+.print_event-name{display:table-cell; font:bold 25px Arial, Helvetica, sans-serif; vertical-align:middle;}
+.print_details{display:block; width:46%; float:left; padding:15px 20px; background-color:#f1f1f1;}
+.clear{clear:both;}
+.ticke_date-preview{display:block; border-bottom:3px solid #fff; padding:8px 0 11px;}
+.ticke_date-label{display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;}
+.ticke_date_show{display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;}
+.bar_code{display:block; text-align:center; padding-bottom:10px;}
+.ticket_seat{display:inline-block; width:45%; font:15px Arial, Helvetica, sans-serif; text-align:center; color:#fff;}
+.ticket_seat span{display:block; padding-top:5px; font:bold 17px Arial, Helvetica, sans-serif; color:#fff;}
+.booking_id{display:block; padding:8px 15px; background-color:#3fc6ee; color:#fff; font:16px Arial, Helvetica, sans-serif; margin-top:10px; border:1px dashed #fff;}
+.ticket_image{display:block; float:right; position:relative; overflow:hidden;}
+.ticket_image img{width:100%;}
+.ticket-seat-outer{display:block; padding:10px 0; background-color:#3fc6ee;}
+.tickets_contents{display:block; margin-top:20px; border:1px solid #d5d5d5; background-color:#f1f1f1; padding:20px;}
+.print_content-left{display:block; float:left; width:47%; font:12px Arial, Helvetica, sans-serif;}
+.print_content-right{display:block; float:right; width:47%; font:12px Arial, Helvetica, sans-serif;}
+.print_content-left h3, .print_content-right h3{margin:0; padding:0 0 10px; font-size:16px; font-weight:bold;}
+.tickets_contents ul{margin:0 0 0 10px; padding:0; list-style-type: disc;}
+.tickets_contents ul li{padding-bottom:3px; margin: 0; border:none; padding-left: 0;}
+.ticket_footer{display:block; text-align:center; padding:10px 0 0; margin-top:15px; font:12px Arial, Helvetica, sans-serif; border-top:1px dashed #aaa;}
+
+						</style></head>
+						<body><div style="width:621px">
+				<?php   
+				echo $basePath;
+				foreach ($seatsData as $row) {
+                                $zoneTitle = $row->zoneTitle;
+                                $zonePrice = $row->zonePrice;
+                                foreach ($row->seatIds as $Id) {
+                                    $label = explode("_", $Id['seatLabel'])[1];
+                                    preg_match_all('/^([^\d]+)(\d+)/', $label, $match);
+                                    $rowId = $match[1][0];
+                                    $colId = $match[2][0]; ?>
+				 <table class="print-container" style="display:block; margin:0 auto; width:800px; padding:30px;">
+                                        <tr class="print_header" style="display:block; padding-bottom:20px;">
+                                            <td class="print_logo" style="display:table-cell; vertical-align:middle; padding-right:50px;"><img src="<?php echo $basePath; ?>/public/assets/frontend/images/newlogo.svg" alt="" /></div>
+                                            <td class="print_event-name" style="display:table-cell; font:bold 25px Arial, Helvetica, sans-serif; vertical-align:middle;">Abu Dhabi Fashion Event</div>
+                                        </tr>
+                                        <tr class="print_details" style="display:block; width:46%; float:left; padding:15px 20px; background-color:#f1f1f1;">
+										<td>
+											<table>
+												<tr>
+												<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+													<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Name:</div>
+													<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $bookingData['FirstName'] ?></div>
+												</td>
+												</tr>
+												<tr>
+												<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+													<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Show Date:</div>
+													<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $date ;?></div>
+												</td>
+												</tr>
+												<tr>
+												<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+													<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Show Time:</div>
+													<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $time ;?></div>
+												</td>
+												</tr>
+												<tr>
+												<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+													<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Location:</div>
+													<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $eventData['EventAddress'] ;?></div>
+												</td>
+												</tr>
+												<tr>
+													<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+														<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Venue:</div>
+														<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $eventData['EventVenueTitle'] ;?></div>
+													</td>
+												</tr>
+												<tr>
+													<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+														<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Purchase Date:</div>
+														<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $bookingData['BookingMadeDate'];?></div>
+													</td>
+												</tr>
+												<tr>
+													<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+														<div class="ticke_date-label" style="display:inline-block; width:120px; font:15px Arial, Helvetica, sans-serif;">Ticket Price:</div>
+														<div class="ticke_date_show" style="display:inline-block; font:bold 17px Arial, Helvetica, sans-serif; color:#3e3e3e;"><?php echo $zonePrice ?> AED</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="ticke_date-preview" style="display:block; border-bottom:3px solid #fff; padding:8px 0 11px;">
+														<div class="bar_code" style="display:block; text-align:center; padding-bottom:10px;"><img src="<?php echo $basePath ?>/public/user/generatebarcode/<?php echo $Id['barCode'] ?>" /></div>
+														<div class="ticket-seat-outer" style="display:block; padding:10px 0; background-color:#3fc6ee;">
+															<div class="ticket_seat" style="display:inline-block; width:45%; font:15px Arial, Helvetica, sans-serif; text-align:center; color:#fff;">
+																Seat
+																<span style="display:block; padding-top:5px; font:bold 17px Arial, Helvetica, sans-serif; color:#fff;"><?php echo $rowId ;?> /<?php echo $colId ;?></span>
+															</div>
+															<div class="ticket_seat" style="display:inline-block; width:45%; font:15px Arial, Helvetica, sans-serif; text-align:center; color:#fff;">
+																Zone
+																<span style="display:block; padding-top:5px; font:bold 17px Arial, Helvetica, sans-serif; color:#fff;"><?php echo ucwords($zoneTitle); ?></span>
+															</div>
+															<div class="clear"></div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="booking_id" style="display:block; padding:8px 15px; background-color:#3fc6ee; color:#fff; font:16px Arial, Helvetica, sans-serif; margin-top:10px; border:1px dashed #fff;">
+														Booking ID: <strong>#<?php echo $bookingData['orderId'];?></strong>
+													</td>
+												</tr>
+											</table>
+											</td>
+											<td class="ticket_image" style="display:block; float:right; position:relative; overflow:hidden;">
+												<div>
+													<img style="width:100%;" src="<?php echo $basePath;?>/public/uploads/event/<?php echo $eventData['EventImageMedium']; ?>" alt="" />
+												</div>
+											<div class="clear"></div>
+											</td>
+										</tr>
+										
+										<tr>
+										<td>
+                                        <div class="tickets_contents" style="display:block; margin-top:20px; border:1px solid #d5d5d5; background-color:#f1f1f1; padding:20px;">
+                                            <div class="print_content-left" style="display:block; float:left; width:47%; font:12px Arial, Helvetica, sans-serif;">
+                                                
+                                            </div>
+                                            <div class="clear"></div>
+                                            <div class="ticket_footer" style="display:block; text-align:center; padding:10px 0 0; margin-top:15px; font:12px Arial, Helvetica, sans-serif; border-top:1px dashed #aaa;">
+                                                Fon any inquiry you can contact us on +971 565555222 &amp; +971 565522522<br/>
+                                                Email: support@tapetickets.com &amp; follow us on Twitter | Facebook
+                                            </div>
+                                        </div>
+										</td>
+										</tr>
+                                    </table>
+                                    <?php
+				}
+				  }?>
+				</div></body></html>

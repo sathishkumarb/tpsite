@@ -1,0 +1,521 @@
+<!--[if gte IE 9]>
+<style type="text/css">.gradient {filter: none}</style>
+<![endif]-->					
+
+<?php
+ echo $this->headScript()
+         ->prependFile($this->basePath() . '/js/jquery.js')
+         //->prependFile($this->basePath(). '/js/dropzone.js')
+         //->prependFile($this->basePath(). '/assets/frontend/js/bootstrap.fd.js')
+;
+?>
+
+<?php echo $this->headLink()->prependStylesheet($this->basePath('/assets/frontend/css/custom-style.css'))->prependStylesheet($this->basePath('/assets/frontend/css/theme-style.css'))->prependStylesheet($this->basePath('/assets/frontend/css/font-awesome.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap-theme.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap.fd.css')); ?>
+<script type="text/javascript">
+var FULL_URL_PATH = '<?php echo $this->url('home', array(), array('force_canonical' => true)); ?>';
+</script>
+
+<script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap3-typeahead.min.js'); ?>"></script>
+
+<script src="<?php echo $this->basePath('/assets/event/jquery-ui.js'); ?>"></script>
+<script src="<?php echo $this->basePath('/js/jquery.validate.js'); ?>"></script>
+<script src="<?php echo $this->basePath('/assets/jquery-countdownTimer/jquery.countdownTimer.js'); ?>"></script> 
+<script src="<?php echo $this->basePath('/js/selectize.js'); ?>"></script>
+<script src="<?php echo $this->basePath('/js/selectindex.js'); ?>"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+<script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap.js'); ?>"></script>
+<script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap.fd.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/datepicker/jquery.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/datepicker/jquery.timepicker.css" />
+<script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/datepicker/lib/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/datepicker/lib/bootstrap-datepicker.css" /> 
+
+<style type="text/css">
+        .selectize-control.links .option .title {
+            display: block;
+        }
+        .selectize-control.links .option .url {
+            font-size: 12px;
+            display: block;
+            color: #a0a0a0;
+        }
+        .selectize-control.links .item a {
+            color: #006ef5;
+        }
+        .selectize-control.links .item.active a {
+            color: #303030;
+        }
+        .dropzone .dz-preview .dz-image {
+          width: 250px;
+          height: 250px;
+        }
+        </style>
+
+<script type="text/javascript">
+jQuery.noConflict();
+
+     jQuery("body").on("focus", "#startdate", function () {
+        jQuery(this).val();
+        jQuery(this).removeClass('hasDatepicker').datepicker({
+            'format': 'yyyy-m-d',
+            'minDate': +1,
+            'autoclose': true,
+        });
+    });
+      jQuery("body").on("focus", "#enddate", function () {
+        jQuery(this).val();
+        jQuery(this).removeClass('hasDatepicker').datepicker({
+            'format': 'yyyy-m-d',
+            'minDate': +1,
+            'autoclose': true,
+        });
+    });
+
+</script>  
+
+<div class="row">
+    <div class="col-md-12 pad12">
+        <!-- MASKED INPUT FIELDS -->
+        <div class="panel panel-default panel-block">
+            <div class="list-group">
+                <div class="se-pre-con"></div>
+                <div class="list-group-item" id="masked-input-fields">
+                    <h4 class="section-title">Add Event</h4>
+                        <table width="100%">
+                                <tr>
+                                    <td width="700" colspan="2">
+                                        <br />
+                                        <button id="eventpicture" name="eventpicture" class="btn btn-primary">Add Event Picture</button>
+                                        <div id="outputeventpicture"></div>    
+                                    </td>
+                                </tr>
+                               
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                 <form id="frmEvent" name="frmEvent" method="post" action="<?php echo $this->basePath(); ?>/events/frontendeventaddprocess">
+                                 <tr>
+                                    <td>
+                                        Event Name
+                                    </td>
+                                     <td>
+                                         <div class="col-lg-12">
+                                                <input class="" id="eventname" type="text" name="eventname" placeholder="Event Name" size="100">
+                                        </div>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                 <tr>
+                                        <td>
+                                             Start Date
+                                            <div class="col-lg-12">
+                                                <input class="date start form-control" id="startdate" type="text" name="startdate" placeholder="Start Date">
+                                            </div>
+                                        </td>
+                                         <td>
+                                            End Date
+                                            <div class="col-lg-12">
+                                                 <input class="date start form-control" id="enddate" type="text" name="enddate" placeholder="End Date">
+                                            </div>
+                                        </td>
+                                 </tr>
+                                  <tr>
+                                    <td>&nbsp;</td>
+                                 </tr>
+                                 <tr>
+                                    <td>
+                                        Event Information
+                                    </td>
+                                    <td>
+                                        <textarea id="eventinfo" name="eventinfo" rows="4" cols="50"></textarea>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Event Category
+                                         </td>
+                                          <td>
+                                            <div class="control-group">
+                                                <select class="form-control" id="eventcategory" name="eventcategory[]" class="demo-default">
+                                                </select>
+                                                <script>
+                                                    jQuery('#eventcategory').selectize({
+                                                        theme: 'category',
+                                                        maxItems: null,
+                                                        valueField: 'id',
+                                                        searchField: 'name',
+                                                        options: <?php echo $dataCategories; ?>,
+                                                        render: {
+                                                            option: function(data, escape) {
+                                                                return '<div class="option">' +
+                                                                        '<span class="title">' + escape(data.name) + '</span>' +
+                                                                        
+                                                                    '</div>';
+                                                            },
+                                                            item: function(data, escape) {
+                                                                return '<div class="item">' + escape(data.name) + '</div>';
+                                                            }
+                                                        },
+                                                        create: function(input) {
+                                                            return {
+                                                                id: 0,
+                                                                name: input,
+                                                                
+                                                            };
+                                                        }
+                                                    });
+                                                </script>
+                                            </div>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Youtube link
+                                         </td>
+                                          <td>
+                                        <input class="" id="youtubelink" type="text" name="youtubelink" placeholder="Youtube Link" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Event Location
+                                         </td>
+                                          <td>
+                                        <input class="" id="eventlocation" type="text" name="eventlocation" placeholder="Event Location" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Event venue name
+                                         </td>
+                                          <td>
+                                        <input class="" id="venuename" type="text" name="venuename" placeholder="Event Location" size="100">
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                </form>
+                                <tr>
+                                    <td>
+                                        <b>Organiser Details</b>
+                                    </td>                                
+                                </tr>
+                              
+                                 <tr>
+                                    
+                                    <td>
+                                        <br />
+                                        <button id="organiserprofilepicture" name="organiserprofilepicture" class="btn btn-primary">Add Organiser Profile Picture</button>
+                                        <div id="outputorganisertpicture"></div>    
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <form id="frmOrganiser" name="frmOrganiser" method="post" action="<?php echo $this->basePath(); ?>/events/frontendeventaddprocess">
+                                <tr>
+                                    <td>
+                                        Organiser name
+                                         </td>
+                                          <td>
+                                        <input class="" id="organisername" type="text" name="organisername" placeholder="Organiser Name" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        Organiser Country
+                                         </td>
+                                          <td>
+                                        
+                                         <select class="form-control" id="organisercountry" name="organisercountry">
+                                            <option value="">Select Country</option>
+                                            <?php if (count($dataCountries) > 0) { ?>   
+                                                <?php foreach ($dataCountries as $countries) { ?>                                            
+                                                    <option value="<?php echo $countries->getId(); ?>"
+                                                    <?php
+                                                    if ($formdata['country'] == $countries->getId()) {
+                                                        echo 'Selected';
+                                                    }
+                                                    ?>
+                                                            ><?php echo $countries->getCountryName(); ?></option>
+                                                        <?php } ?>  
+                                                    <?php } ?>  
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                               
+                                <tr>
+                                    <td>
+                                        Organiser Address
+                                         </td>
+                                          <td>
+                                        <input class="" id="organiseraddress" type="text" name="organiseraddress" placeholder="Organiser Address" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Organiser Website
+                                         </td>
+                                          <td>
+                                        <input class="" id="organiserwebsite" type="text" name="organiserwebsite" placeholder="Organiser Website" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Organiser Facebook
+                                         </td>
+                                          <td>
+                                        <input class="" id="organiserfb" type="text" name="organiserfb" placeholder="Organiser Facebook" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        Organiser Twitter
+                                         </td>
+                                          <td>
+                                        <input class="" id="organisertwitter" type="text" name="organisertwitter" placeholder="Organiser Twitter" size="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        Organiser Email
+                                         </td>
+                                          <td>
+                                        <input class="" id="organiserfb" type="text" name="organiserfb" placeholder="Org Email" size="100">
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Organiser Info
+                                         </td>
+                                          <td>
+                                        <textarea class="" id="organiserinfo" name="organiserinfo" placeholder="Org Info" rows="4" cols="50"> </textarea>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                </form>
+                        <table>
+                        
+                        <div class="btnaddriv"><input type="submit" name="save_event_btn" id="save_event_btn" class="btn btn-default saveaddridt" value="Next"></div>
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+                             
+<script type="text/javascript">
+    jQuery("#organiserprofilepicture").click(function() {
+        jQuery.FileDialog({multiple: true}).on('files.bs.filedialog', function(ev) {
+            var files = ev.files;
+            var text = "";
+            files.forEach(function(f) {
+                text += f.name + "<br/>";
+                name = f.name;
+                size = f.size;
+                type = f.type;
+            });
+            jQuery("#outputorganisertpicture").html(text);
+//var file = this.files[0];
+   
+
+            if(name.length < 1) {
+            }
+            else if(size > 1000000) {
+                alert("File is to big");
+            }
+            else if(type != 'image/png' && type != 'image/jpg' && type != 'image/gif' && type != 'image/jpeg' ) {
+                alert("File doesnt match png, jpg or gif");
+            }
+            else { 
+               
+                var fd = new FormData();    
+                fd.append( 'file', files[0] );
+                jQuery.ajax({
+               url: "/tpsite/public/events/frontendeventimageupload", // Url to which the request is send
+                    type: "POST",             // Type of request to be send, called as method
+                   xhr: function() {  // custom xhr
+                        myXhr = jQuery.ajaxSettings.xhr();
+                        if(myXhr.upload){ // if upload property exists
+                            myXhr.upload.addEventListener('progress', progress, false); // progressbar
+                        }
+                        return myXhr;
+                    },
+                    // Ajax events
+                    success: completeHandler = function(data) {
+                       console.log(data);
+                    },
+                    error: errorHandler = function() {
+                        alert("Något gick fel");
+                    },
+                    // Form data
+                    data: fd,
+                    // Options to tell jQuery not to process data or worry about content-type
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                }, 'json');
+                
+            }
+        
+
+        }).on('cancel.bs.filedialog', function(ev) {
+            jQuery("#outputorganisertpicture").html("Cancelled!");
+        });
+    });
+
+    jQuery("#eventpicture").click(function() {
+        jQuery.FileDialog({multiple: true}).on('files.bs.filedialog', function(ev) {
+            var files = ev.files;
+            var text = "";
+            files.forEach(function(f) {
+                text += f.name + "<br/>";
+                name = f.name;
+                size = f.size;
+                type = f.type;
+            });
+            jQuery("#outputeventpicture").html(text);
+//var file = this.files[0];
+   
+
+            if(name.length < 1) {
+            }
+            else if(size > 1000000) {
+                alert("File is to big");
+            }
+            else if(type != 'image/png' && type != 'image/jpg' && type != 'image/gif' && type != 'image/jpeg' ) {
+                alert("File doesnt match png, jpg or gif");
+            }
+            else { 
+               
+                var fd = new FormData();    
+                fd.append( 'file', files[0] );
+                jQuery.ajax({
+               url: "/tpsite/public/events/frontendeventimageupload", // Url to which the request is send
+                    type: "POST",             // Type of request to be send, called as method
+                   xhr: function() {  // custom xhr
+                        myXhr = jQuery.ajaxSettings.xhr();
+                        if(myXhr.upload){ // if upload property exists
+                            myXhr.upload.addEventListener('progress', progress, false); // progressbar
+                        }
+                        return myXhr;
+                    },
+                    // Ajax events
+                    success: completeHandler = function(data) {
+                       console.log(data);
+                    },
+                    error: errorHandler = function() {
+                        alert("File upload Error");
+                    },
+                    // Form data
+                    data: fd,
+                    // Options to tell jQuery not to process data or worry about content-type
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                }, 'json');
+                
+            }
+        
+
+        }).on('cancel.bs.filedialog', function(ev) {
+            jQuery("#outputeventpicture").html("Cancelled!");
+        });
+    });
+
+    function progress(e){
+
+        if(e.lengthComputable){
+            var max = e.total;
+            var current = e.loaded;
+
+            var Percentage = (current * 100)/max;
+            console.log(Percentage);
+
+            if(Percentage >= 100)
+            {
+               // process completed  
+            }
+        }  
+     }
+
+$('input#save_event_btn').click( function() {
+        var $form1 = $("#frmEvent");
+           s
+        $.ajax({
+            url : formURL,
+            type: "POST",
+            data : postData,
+            success:function(data, textStatus, jqXHR) 
+            {
+                console.log(data);
+                console.log(textStatus);
+                 $('form[name="frmOrganiser"]').each(function () {
+                    var $form = $(this);
+                    var pic = $("#outputorganiserpicture").text();
+                    $form.append('<input type="hidden" id="organiserpicture" name="organiserpicture" value="'+pic+'">');
+                    $.post($form.attr("action"), $form.serialize(), function () {
+                       $form.submit();
+                       // alert('Form 2 submitted');
+                    });
+                })
+                //data: return data from server
+            },
+            error: function(jqXHR, textStatus, errorThrown) 
+            {
+                //if fails      
+            }
+        });
+      
+});
+
+</script>
+
+
+
+
+
+
+

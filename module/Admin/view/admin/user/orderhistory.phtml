@@ -1,0 +1,61 @@
+<input type="hidden" id="userid" value="<?php echo $this->userId ?>">
+<div class="spcallmain"></div>
+    <div class="panel panel-default panel-block">
+      <div class="list-group">
+        <div class="list-group-item" id="responsive-bordered-table">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-18 col-md-4">
+                <h4 class="section-title hline">List of Orders</h4>
+              </div>                          
+              <div class="linecvr"></div>
+              <?php echo $this->flashMessenger()->render('success', array('alert alert-success')); ?>
+            </div>
+          </div>
+
+          <!--Basic Table-->
+          <div class="tripdtalscrol">
+              <div class="alert alert-success" style="display:none"></div>
+            <div class="table-responsive">
+              <table id="datatableuser" class="table table-bordered table-striped">
+                <thead class="">
+                  <tr>
+                    <th>Order Id</th>
+                    <th>Event Name</th>
+                    <th>Event Venue</th>
+                    <th>Event Date & Time</th>
+                    <th>Booked Seats</th>
+                    <th>Detailed Order</th>
+                  </tr>
+                </thead>
+               
+              </table>
+            </div>
+          </div>
+          <div id="dialog-confirm" title="Confirm Deletion" style="display:none;">
+            <p>
+              <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+              Are you sure you want to delete this user?
+            </p>
+          </div>
+          <div id="dialog-confirm-change" title="Confirm Status Change" style="display:none;">
+            <p>
+              <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+              Are you sure you want to change the status of this user?
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<?php $this->inlineScript()
+           ->prependFile($this->basePath() . '/assets/admin/scripts/orderslisting.js', 'text/javascript')
+           ->prependFile($this->basePath() . '/assets/datatables/media/js/dataTables.bootstrap.js', 'text/javascript')
+           ->prependFile($this->basePath() . '/assets/datatables/media/js/jquery.dataTables.js', 'text/javascript');
+            // ->prependFile($this->basePath() . '/js/bootstrap_paging.js')
+            // ->prependFile($this->basePath() . '/js/placeholder/jquery.placeholder.js')?>
+<?php
+     $this->headLink()         
+          ->appendStylesheet($this->basePath() . '/assets/datatables/media/css/dataTables.bootstrap.css')
+          ->appendStylesheet($this->basePath() . '/assets/datatables/media/css/jquery.dataTables.css');
+?>

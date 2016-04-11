@@ -1,0 +1,111 @@
+<?php
+$tmp_seat = array();
+foreach($this->seat_details as $key=>$val){    
+    $type = $key;
+    $tmp_seat[$type] = "";
+    foreach($val as $seatno){
+        $tmp_seat[$type] .= $seatno.",";
+    }
+    $tmp_seat[$type] = substr($tmp_seat[$type],0,-1);
+}
+?>
+<div class="spcallmain"></div>
+<div class="panel panel-default panel-block">
+    <div class="list-group">
+        <div id="driver-details" class="list-group-item">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6 col-md-4">
+                        <h4 class="section-title hline">Order Details</h4>
+                    </div>
+                    <div class="col-xs-6 col-md-4"></div>
+                    <div class="col-xs-6 col-md-4"> </div>
+                    <div class="linecvr"></div>
+                </div>
+            </div>
+
+            <!--Basic Table-->
+
+            <div class="table-responsive gridover">
+                <table class="table table-bordered table-striped thonly">
+                    <tbody>
+
+                        <tr>
+                            <th>Order Number</th>
+                            <td><?php echo $this->order_details['orderid']; ?></td>
+                            <th>Transaction N.o.</th>
+                            <td><?php echo $this->order_details['txn_no']; ?></td>
+                        </tr>                        
+                        <tr>
+                            <th>Event Name</th>
+                            <td><?php echo $this->event_details['name'] ?></td>
+                            <th>Event Date Time</th>
+                            <td><?php echo $this->event_details['datetime'] ?></td>
+                        </tr>                        
+                        <tr>
+                            <th>Total Booked Seats</th>
+                            <td><?php echo $this->order_details['seats']; ?></td>
+                            <th>Amount Paid</th>
+                            <td><?php echo $this->billing_details['amt_paid'] ?></td>
+                        </tr>
+
+                        <tr>
+                            <th>Billing Address</th>
+                            <td colspan='3'><?php echo $this->billing_details['address'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Customer Name</th>
+                            <td><?php echo $this->billing_details['name'] ?></td>
+                            <th>Card Number</th>
+                            <td><?php echo $this->billing_details['card'] ?></td>
+                        </tr>                        
+                        <tr>
+                            <th>Email</th>
+                            <td><?php echo $this->billing_details['email'] ?></td>
+                            <th>Phone</th>
+                            <td><?php echo $this->billing_details['phone'] ?></td>
+                        </tr>                        
+                        <tr>
+                            <th>Booking Date</th>
+                            <td><?php echo $this->order_details['booking_date'] ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default panel-block">
+    <div class="list-group">
+        <div id="trip-booking" class="list-group-item">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-18 col-md-3"><h4 class="section-title hline">Seat Details</h4></div>    
+                </div>                   
+                <div class="linecvr"></div>
+            </div>          
+            <!--Basic Table-->
+            <div class="seatdetails">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead class="">
+                            <tr>
+                                <th>Ticket Type</th>
+                                <th>Seat Number</th>								
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach($tmp_seat as $seat_type=>$seat_no){
+                            ?>
+                                <tr><td><?php echo $seat_type; ?></td><td><?php echo $seat_no; ?></td></tr>
+                            <?php
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

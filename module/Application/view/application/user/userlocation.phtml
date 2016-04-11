@@ -1,0 +1,69 @@
+<h5>location</h5>
+<?php
+$form = $this->form;
+$form->setAttribute('action', '');
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('country')); ?>
+    </div>
+    <div class="form-group">
+      <?php echo $this->formRow($form->get('city')); ?>
+    </div>    
+    <?php echo $this->formRow($form->get('submitbutton')); ?>
+    <?php echo $this->form()->closeTag(); ?>
+<script>
+$( document ).ready(function() {	
+    $("#userlocation").validate({
+		errorClass:'validation-error',
+		rules: {				
+			country:{ required:true },
+			city:{ required:true },			
+		},
+                messages: {
+                        country:{                             
+                                required:"Select Country"
+			},  
+			city:{
+                                required:"Select City"
+                       }      
+                },
+		submitHandler: function(form) {
+			$("#userinfo .alert-danger").hide();                       
+                        var formData = $("#userlocation").serialize();                                    
+                        $.post('<?php echo $this->action;?>', formData, function(response){
+                            var obj = jQuery.parseJSON( response );
+                            var status = obj.status;
+                            var msg = obj.msg;                                  
+                            if(status == 1){
+                                $("#location .alert-error").hide();
+                                $("#location .alert-success").show();
+                                $("#location .alert-success").html(msg);                           
+                                setTimeout(function() {
+                                    $("#location .alert-success").hide()
+                                }, 5000);
+                            }else if(status == -1){
+                                window.location = '<?php echo $this->url('home') ?>';
+                            }else{
+                                $("#location .alert-error").html(msg);
+                                $("#location .alert-error").show();
+                                $("#location .alert-success").hide();                                    
+                                setTimeout(function() {
+                                    $("#location .alert-error").hide()
+                                }, 5000);
+                            }
+                        });
+		}                
+	});    
+});  
+    function getCity(countryid){
+    var fetch_city_url = "<?php echo $this->url('getcity'); ?>"+countryid;
+    $.ajax({
+        url: fetch_city_url        
+  })
+  .done(function( data ) {
+    $('#city').html(data);
+  });
+}    
+        </script>

@@ -1,0 +1,333 @@
+<style type="text/css">
+    .seatRow {
+        margin-bottom: 50px;
+    }
+    .seats {
+        background: #fff none repeat scroll 0 0;
+        border-radius: 10px;
+        box-shadow: 0 0 1px 0 #ccc;
+        cursor: pointer;
+        display: block;
+        float: left;
+        height: auto;
+        margin: 3px;
+        padding: 5px;
+        text-align: center;
+        width: 100px;
+    }
+    .status {
+        display: block;
+        width: 100%;
+        word-wrap: break-word;
+    }
+    input.radioSeat {
+        display: none;
+        visibility: hidden;
+    }
+    .seats.seat_release {
+        background: #eee none repeat scroll 0 0;
+    }
+    .seats.checked {
+        background: #ff0 none repeat scroll 0 0;
+    }
+    .seats.remove {
+        background: #eee none repeat scroll 0 0;
+    }
+</style>
+<div class="spcallmain"></div>
+<div class="panel panel-default panel-block">
+    <div class="list-group">
+        <div class="se-pre-con"></div>
+        <div class="list-group-item" id="masked-input-fields">
+            <h4 class="section-title">Block Or Release</h4>
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="eventList" class="control-label">Event List</label>
+                    <select class="form-control" id="eventList" name="eventList">
+                        <?php
+                        if (!empty($eventList)) {
+                            ?><option value="0">Select Category</option><?php
+                            foreach ($eventList as $row) {
+                                ?><option value="<?= $row['id']; ?>"><?= $row['eventName']; ?></option><?php
+                            }
+                        } else {
+                            ?><option value="0">List is empty</option><?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="eventVenue" class="control-label">Date / Time</label>
+                    <select class="form-control change" id="eventVenue" name="eventVenue" disabled>
+                        <option value="0">Select Date / Time</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="eventArea" class="control-label">Area / Zone</label>
+                    <select class="form-control change" id="eventArea" name="eventArea" disabled>
+                        <option value="0">Select Area / Zone</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="eventMethod" class="control-label">Method</label>
+                    <select class="form-control change" id="eventMethod" name="eventMethod" disabled>
+                        <option value="0">Select Method</option>
+                        <option value="block">To Block</option>
+                        <option value="release">To Release</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="checkBtn" class="control-label">Check</label>
+                    <div class="clear"></div>
+                    <button id="checkBtn" class="btn btn-primary disabled">Check</button>
+                    <span class="error"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spcallmain"></div>
+<div class="panel panel-default panel-block">
+    <div class="list-group">
+        <div class="se-pre-con"></div>
+        <div class="list-group-item" id="masked-input-fields">
+            <div class="tripdtalscrol">
+                <div id="eventReport"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(document).ready(function (e) {
+        var eventMethod, eventArea, eventList, eventVenue;
+        var checkedSeats = [];
+        function checkSelections() {
+            eventMethod = jQuery('#eventMethod').val();
+            eventArea = jQuery('#eventArea').val();
+            eventList = jQuery('#eventList').val();
+            eventVenue = jQuery('#eventVenue').val();
+            if (eventList === '0') {
+                var msg = 'Please select an Event to check';
+                return msg;
+            } else if (eventArea === '0') {
+                var msg = 'Please select Area to check';
+                return msg;
+            } else if (eventMethod === '0') {
+                var msg = 'Please select Method to check';
+                return msg;
+            } else if (eventArea === '0') {
+                var msg = 'Please select Area to check';
+                return msg;
+            } else if (eventVenue === '0') {
+                var msg = 'Please select a Date/Time to check';
+                return msg;
+            } else {
+                var msg = 'success';
+                return msg;
+            }
+        }
+        function ajaxchangeseatstatus(spanId, radioId, status) {
+            var checked = false;//already selected
+            if (jQuery.inArray(spanId, checkedSeats) === -1) {
+                checkedSeats.push(spanId);//if not selected
+            }
+            if (jQuery.inArray(spanId, checkedSeats) !== -1) {
+                checked = true;
+            }
+            var path = FULL_URL_PATH + '/admin/event/ajaxchangeseatstatus';
+            jQuery.ajax({
+                type: 'POST',
+                url: path,
+                async: false,
+                data: {'checked': status, 'seatId': radioId.split('_')[1]},
+                dataType: 'json', success: function (response) {
+                    if (response.status === 'success') {
+                        if (response.option) {
+                            jQuery('#' + spanId).toggleClass('checked');
+                            jQuery('#' + radioId).prop('checked', status);
+                        } else {
+                            if (jQuery('#' + spanId).hasClass('seat_block')) {
+                                jQuery('#' + spanId + ' .status').html('already checked').addClass('remove');
+                                if (checked) {
+                                    jQuery('#' + spanId).fadeOut(3000, function () {
+                                        jQuery(this).remove();
+                                    });
+                                    checkedSeats = jQuery.grep(checkedSeats, function (value) {
+                                        return value !== spanId;
+                                    });
+                                }
+                            }
+                            if (jQuery('#' + spanId).hasClass('seat_release')) {
+                                if (checked) {
+                                    jQuery('#' + spanId + ' .status').html('already checked').addClass('remove');
+                                    jQuery('#' + spanId).fadeOut(3000, function () {
+                                        jQuery(this).remove();
+                                    });
+                                    checkedSeats = jQuery.grep(checkedSeats, function (value) {
+                                        return value !== spanId;
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        //eventList change
+        jQuery('#eventList').on('change', function (e) {
+            jQuery('.change').attr('disabled', true);
+            var eventId = jQuery(this).val();
+            var path = FULL_URL_PATH + '/admin/event/ajaxgetareazone';
+            var areaList = [];
+            var scheduleList = [];
+            jQuery.ajax({
+                type: 'GET',
+                url: path,
+                async: false,
+                data: {event_id: eventId},
+                dataType: 'json', success: function (response) {
+                    if (response.status === 'success') {
+                        areaList = response.areaList;
+                        scheduleList = response.scheduleList;
+                    }
+                }
+            });
+            var h = '';
+            //scheduleList
+            if (scheduleList.length > 0) {
+                h += '<option value="0">Select Date / Time</option>';
+                jQuery.each(scheduleList, function (i, v) {
+                    h += '<option value="' + v.id + '">' + v.dateTime + '</option>';
+                });
+                jQuery('#eventVenue').attr('disabled', false);
+            } else {
+                h = '<option value="0">List is empty</option>';
+            }
+            jQuery('#eventVenue').html('');//make empty
+            jQuery('#eventVenue').append(h);//append
+
+            h = '';//make empty
+            //areaList
+            if (areaList.length > 0) {
+                h += '<option value="0">Select Area / Zone</option>';
+                jQuery.each(areaList, function (i, v) {
+                    h += '<option value="' + v.id + '">' + v.zoneTitle + '</option>';
+                });
+            } else {
+                h = '<option value="0">List is empty</option>';
+            }
+            jQuery('#eventArea').html('');//make empty
+            jQuery('#eventArea').append(h);//append
+        });
+        //eventVenue change
+        jQuery('#eventVenue').on('change', function (e) {
+            jQuery('#eventArea').attr('disabled', true);
+            var v = jQuery(this).val();
+            if (v !== '0') {
+                jQuery('#eventArea').attr('disabled', false);
+            }
+        });
+        //eventArea change
+        jQuery('#eventArea').on('change', function (e) {
+            jQuery('#eventMethod').attr('disabled', true);
+            var v = jQuery(this).val();
+            if (v !== '0') {
+                jQuery('#eventMethod').attr('disabled', false);
+            }
+        });
+        //eventMethod change
+        jQuery('#eventMethod').on('change', function (e) {
+            jQuery('#checkBtn').addClass('disabled');
+            var v = jQuery(this).val();
+            if (v !== '0') {
+                jQuery('#checkBtn').removeClass('disabled');
+            }
+        });
+        //submit form
+        jQuery('#checkBtn').on('click', function (e) {
+            var error = checkSelections();
+            if (error !== 'success') {
+                jQuery('.error').html(error);
+                return false;
+            }
+            jQuery('.error').html('Please wait...');
+            var path = FULL_URL_PATH + '/admin/event/ajaxcheckavailability';
+            jQuery.ajax({
+                type: 'POST',
+                url: path,
+                async: false,
+                data: {'method': eventMethod, 'eventId': eventList, 'scheduleId': eventVenue, 'zoneId': eventArea},
+                dataType: 'json', success: function (response) {
+                    if (response.status === 'success') {
+                        jQuery('.error').html('');
+                        jQuery('#eventReport').html('').append(response.result);
+                    }
+                }
+            });
+        });
+        //multi selection check box
+        jQuery('#eventReport').delegate('.checkAll', 'change', function (e) {
+            var status = false;
+            if (this.checked) {
+                status = true;
+            }
+            var Id = jQuery(this).attr('id');
+            var parentId = jQuery('#' + Id).closest("fieldset").attr('id');
+            jQuery('#' + parentId + ' .radioSeat').each(function (i, v) {
+                var radioId = jQuery(this).attr('id');
+                var spanId = 'span_' + radioId.split('_')[1];
+                if (status) {
+                    if (jQuery('#' + spanId).hasClass('seat_release')) {
+                        status = false;
+                    }
+                }
+                ajaxchangeseatstatus(spanId, radioId, status);
+            });
+        });
+        //check - uncheck seats
+        jQuery('#eventReport').delegate('.seats', 'click', function (e) {
+            var spanId = jQuery(this).attr('id');
+            var status = true;
+            var radioId = jQuery(this).children('.radioSeat').attr('id');
+            if (jQuery('#' + radioId).is(':checked')) {
+                status = false;
+                ajaxchangeseatstatus(spanId, radioId, status);
+            } else {
+                ajaxchangeseatstatus(spanId, radioId, status);
+            }
+        });
+        //block or release seats
+        jQuery('#eventReport').delegate('.blockRelease', 'click', function (e) {
+            checkedSeats = [];
+            var path = FULL_URL_PATH + '/admin/event/ajaxblockreleaseseats';
+            var typeId = jQuery(this).attr('id');
+            var frmData = [];
+            if (typeId === 'block') {
+                frmData = jQuery('#frmBlockRelease').serializeArray();
+            } else {
+                jQuery('#frmBlockRelease .checked').each(function (i, v) {
+                    var tmpArray = {};
+                    tmpArray.name = v.id;
+                    tmpArray.value = v.id.split('_')[1];
+                    frmData.push(tmpArray);
+                });
+            }
+            jQuery.ajax({
+                type: 'POST',
+                url: path,
+                async: false,
+                data: {'type': typeId, 'frmData': frmData},
+                dataType: 'json', success: function (response) {
+                    if (response.status === 'success') {
+                        if (response.option) {
+                            jQuery('#eventReport .error').html('done successfully...');
+                            jQuery('#eventReport .error').fadeOut(3000, function () {
+                                jQuery('#checkBtn').trigger('click');
+                            });
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,175 @@
+<div class="spcallmain"></div>
+<div class="panel panel-default panel-block">
+    <div class="list-group">
+        <div id="responsive-bordered-table" class="list-group-item">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-18 col-md-4">
+                        <h4 class="section-title">Event Reports</h4>
+                    </div>
+                    <div class="col-xs-18 col-md-8">
+                    </div>              
+                    <div class="linecvr"></div>
+                </div>
+                <div class="row">
+                    <form action="" method="post" id="frmEventReports" name="frmEventReports" class="form-horizontal" enctype="multipart/form-data" >
+                        <div class="col-md-2"><label class="control-label reporttype" for="reporttype">Report Type</label></div>
+                        <div class="col-md-2"><label class="control-label eventlist" for="eventlist">Event List</label></div>
+                        <div class="col-md-2"><label class="control-label startdate" for="startdate">Date Start</label></div>
+                        <div class="col-md-2"><label class="control-label enddate" for="enddate">Date End</label></div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2"><label class="control-label pull-right" for="viewreport">View Report</label></div>
+                        <div class="clear"></div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="reporttype" name="reporttype">
+                                <option value="0">Select Type</option>
+                                <option value="eventlist">Per Event</option>
+                                <option value="startend">Date Range</option>
+                                <option value="fnsreport">Financial Summary Report</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control change" id="eventlist" name="eventlist" disabled>
+                                <option value="0">Select Type</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input class="form-control change startend" disabled id="startdate" type="text" name="startdate" placeholder="start date">
+                        </div>
+                        <div class="col-md-2">
+                            <input class="form-control change startend" disabled id="enddate" type="text" name="enddate" placeholder="end date">
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2"><button id="btnSubmit" class="btn btn-primary disabled pull-right">Submit</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="spcallmain"></div>
+<div class="panel panel-default panel-block">
+    <div class="tripdtalscrol list-group-item">
+        <div id="eventReport"></div>
+    </div>
+</div>
+<!--<script type="text/javascript" src="<?//php echo $this->basePath();?>/assets/datepicker/jquery.timepicker.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="<?//php echo $this->basePath();?>/assets/datepicker/jquery.timepicker.css" />-->
+<script type="text/javascript" src="<?php echo $this->basePath(); ?>/assets/datepicker/lib/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath(); ?>/assets/datepicker/lib/bootstrap-datepicker.css" />  
+<script type="text/javascript">
+    jQuery(document).ready(function (e) {
+        var reporttype = '';
+        var eventList = [];
+        function Popup(data) {
+            var c = String(data);
+            var myWindow = window.open('', 'My Ticket', '');
+            myWindow.document.write('<html><head><title></title><link href="//fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Raleway:400,300,700" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/bootstrap.min.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/theme-style.css" rel="stylesheet" type="text/css"><link href="' + FULL_URL_PATH + '/assets/frontend/css/custom-style.css" rel="stylesheet" type="text/css"></head><body onload="printPage()">');
+            myWindow.document.write('<div class="container main"><div class="row"><div class="col-md-12"><div class="ticket-preview">');
+            myWindow.document.write(c);
+            myWindow.document.write('</div></div></div></div><scrip' + 't type="text/javascript">function printPage(){window.print();}</sc' + 'ript></body></html>');
+            myWindow.document.close();
+            myWindow.focus();
+//            myWindow.print();
+//            myWindow.close();
+            return true;
+        }
+        function printTarget(id) {
+            var data = jQuery('#' + id).clone().html();
+            Popup(data);
+        }
+        /**
+         * get ajax event list
+         * @returns void
+         */
+        function getajaxeventlist() {
+            var path = FULL_URL_PATH + '/admin/event/ajaxgeteventlist';
+            jQuery.ajax({
+                type: 'GET',
+                url: path,
+                async: false,
+                data: {},
+                dataType: 'json', success: function (response) {
+                    if (response.status === 'success') {
+                        eventList = response.list;
+                    }
+                }
+            });
+            if (eventList.length > 0) {
+                var h = '<option value="0">Select Event</option>';
+                jQuery.each(eventList, function (i, v) {
+                    h += '<option value="' + v.id + '">' + v.eventName + '</option>';
+                });
+                jQuery('#eventlist').html('');//make empty
+                jQuery('#eventlist').append(h);//append
+            }
+        }
+        jQuery('#reporttype').on('change', function (e) {
+            reporttype = jQuery(this).val();
+            jQuery('#btnSubmit').removeClass('disabled');
+            switch (reporttype) {
+                case 'eventlist':
+                    getajaxeventlist();
+                    jQuery('.change').attr('disabled', true);
+                    jQuery('#eventlist').removeAttr('disabled');
+                    break;
+                case 'startend':
+                    jQuery('.change').attr('disabled', true);
+                    jQuery('.startend').removeAttr('disabled');
+                    break;
+                case 'fnsreport':
+                    jQuery('.change').attr('disabled', true);
+                    break;
+                default :
+                    jQuery('.change').attr('disabled', true);
+                    jQuery('#btnSubmit').addClass('disabled');
+                    break;
+            }
+        });
+        jQuery('#startdate').datepicker({
+            changeMonth: false,
+            changeYear: false,
+            dateFormat: 'yy-mm-dd',
+            duration: 'fast',
+            stepMonths: 0,
+            defaultDate: "+1w",
+            numberOfMonths: 1,
+            onClose: function (selectedDate) {
+                jQuery("#enddate").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        jQuery('#enddate').datepicker({
+            changeMonth: false,
+            changeYear: false,
+            dateFormat: 'yy-mm-dd',
+            duration: 'fast',
+            stepMonths: 0,
+            defaultDate: "+1w",
+            numberOfMonths: 1,
+            onClose: function (selectedDate) {
+                jQuery("#startdate").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+        jQuery('#btnSubmit').on('click', function (e) {
+            e.preventDefault();
+            var frmData = jQuery('#frmEventReports').serialize();
+            console.log(frmData);
+            var path = FULL_URL_PATH + '/admin/event/ajaxgeteventreport';
+            jQuery.ajax({
+                type: 'POST',
+                url: path,
+                async: false,
+                data: frmData,
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status === 'success') {
+                        jQuery('#eventReport').html('').append(response.result);
+                    }
+                }
+            });
+        });
+        jQuery('#eventReport').delegate('#printThis', 'click', function (e) {
+            printTarget('eventReport');
+        });
+    });
+</script>
