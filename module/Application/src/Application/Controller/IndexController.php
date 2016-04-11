@@ -240,12 +240,12 @@ class IndexController extends AbstractActionController {
 			// end change
         }
         if (!empty($cityobj)) {
-            $nearbyEvents = $em->getRepository('Admin\Entity\Event')->getHomePageEvents($cityobj);
+            //$nearbyEvents = $em->getRepository('Admin\Entity\Event')->getHomePageEvents($cityobj);
         } else {
             $nearbyEvents = "";
         }
 
-        $this->layout()->featuredEvents = $featuredEvents;
+        //$this->layout()->featuredEvents = $featuredEvents;
         $this->layout()->signupError = $signupError;
         $this->layout()->succsMsg = $succsMsg;
         $searchSession = new Container("searchsess");

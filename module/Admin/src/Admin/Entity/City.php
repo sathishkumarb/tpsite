@@ -35,6 +35,13 @@ class City
      */
     private $cityName = 'new county';
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="iconic_image", type="string", length=100, nullable=false)
+     */
+    private $cityImage = 'dubai';
+
     /**
      * @var integer
      *
@@ -107,6 +114,28 @@ class City
     public function getCityName()
     {
         return $this->cityName;
+    }
+
+    /**
+     * Set cityImage
+     *
+     * @param string $cityImage
+     *
+     * @return City
+     */
+    public function setCityImage($cityImage)
+    {
+        $this->cityImage = $cityImage;
+        return $this;
+    }
+    /**
+     * Get cityImage
+     *
+     * @return string
+     */
+    public function getCityImage()
+    {
+        return $this->cityImage;
     }
 
     /**
