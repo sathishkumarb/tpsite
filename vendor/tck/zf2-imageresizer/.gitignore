@@ -1,0 +1,5 @@
+data
+vendor
+composer.lock
+phing*.phar
+*.bat
