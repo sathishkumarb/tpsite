@@ -9,7 +9,6 @@
          //->prependFile($this->basePath(). '/assets/frontend/js/bootstrap.fd.js')
 ;
 ?>
-
 <?php echo $this->headLink()->prependStylesheet($this->basePath('/assets/frontend/css/custom-style.css'))->prependStylesheet($this->basePath('/assets/frontend/css/theme-style.css'))->prependStylesheet($this->basePath('/assets/frontend/css/font-awesome.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap-theme.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap.fd.css')); ?>
 <script type="text/javascript">
 var FULL_URL_PATH = '<?php echo $this->url('home', array(), array('force_canonical' => true)); ?>';
@@ -19,9 +18,9 @@ var FULL_URL_PATH = '<?php echo $this->url('home', array(), array('force_canonic
 
 <script src="<?php echo $this->basePath('/assets/event/jquery-ui.js'); ?>"></script>
 <script src="<?php echo $this->basePath('/js/jquery.validate.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/assets/jquery-countdownTimer/jquery.countdownTimer.js'); ?>"></script> 
+<!--script src="<?php echo $this->basePath('/assets/jquery-countdownTimer/jquery.countdownTimer.js'); ?>"></script> 
 <script src="<?php echo $this->basePath('/js/selectize.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/js/selectindex.js'); ?>"></script>
+<script src="<?php echo $this->basePath('/js/selectindex.js'); ?>"></script-->
 <script type="text/javascript">jQuery.noConflict();</script>
 <script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap.js'); ?>"></script>
 <script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap.fd.js'); ?>"></script>
@@ -86,7 +85,8 @@ jQuery.noConflict();
                                     <td width="700" colspan="2">
                                         <br />
                                         <button id="eventpicture" name="eventpicture" class="btn btn-primary">Add Event Picture</button>
-                                        <div id="outputeventpicture"></div>    
+                                        <div id="outputeventpicture"></div> 
+                                        <div id="previeweventpicture"></div>   
                                     </td>
                                 </tr>
                                
@@ -141,34 +141,45 @@ jQuery.noConflict();
                                          </td>
                                           <td>
                                             <div class="control-group">
-                                                <select class="form-control" id="eventcategory" name="eventcategory[]" class="demo-default">
+                                                <select class="form-control" id="eventcategory" name="eventcategory" class="demo-default">
+                                                    <option value="">Select Category</option>
+                                                <?php if (count($dataCategories) > 0) { 
+                                                    foreach ($dataCategories as $categories) { ?>                                                        
+                                                    <option value="<?php echo $categories->getId(); ?>"
+                                                    <?php
+                                                    if ($formdata['category'] == $categories->getId()) {
+                                                        echo 'Selected';
+                                                    }
+                                                    ?>
+                                                            ><?php echo $categories->getCategoryName(); ?></option>
+                                                    <?php }  } ?>  
                                                 </select>
                                                 <script>
-                                                    jQuery('#eventcategory').selectize({
-                                                        theme: 'category',
-                                                        maxItems: null,
-                                                        valueField: 'id',
-                                                        searchField: 'name',
-                                                        options: <?php echo $dataCategories; ?>,
-                                                        render: {
-                                                            option: function(data, escape) {
-                                                                return '<div class="option">' +
-                                                                        '<span class="title">' + escape(data.name) + '</span>' +
+                                                    // jQuery('#eventcategory').selectize({
+                                                    //     theme: 'category',
+                                                    //     maxItems: null,
+                                                    //     valueField: 'id',
+                                                    //     searchField: 'name',
+                                                    //     options: <?php echo $dataCategories; ?>,
+                                                    //     render: {
+                                                    //         option: function(data, escape) {
+                                                    //             return '<div class="option">' +
+                                                    //                     '<span class="title">' + escape(data.name) + '</span>' +
                                                                         
-                                                                    '</div>';
-                                                            },
-                                                            item: function(data, escape) {
-                                                                return '<div class="item">' + escape(data.name) + '</div>';
-                                                            }
-                                                        },
-                                                        create: function(input) {
-                                                            return {
-                                                                id: 0,
-                                                                name: input,
+                                                    //                 '</div>';
+                                                    //         },
+                                                    //         item: function(data, escape) {
+                                                    //             return '<div class="item">' + escape(data.name) + '</div>';
+                                                    //         }
+                                                    //     },
+                                                    //     create: function(input) {
+                                                    //         return {
+                                                    //             id: 0,
+                                                    //             name: input,
                                                                 
-                                                            };
-                                                        }
-                                                    });
+                                                    //         };
+                                                    //     }
+                                                    // });
                                                 </script>
                                             </div>
                                     </td>
@@ -178,7 +189,7 @@ jQuery.noConflict();
                                 </tr>
                                 <tr>
                                     <td>
-                                        Youtube link
+                                        Youtube Link
                                          </td>
                                           <td>
                                         <input class="" id="youtubelink" type="text" name="youtubelink" placeholder="Youtube Link" size="100">
@@ -195,15 +206,39 @@ jQuery.noConflict();
                                         <input class="" id="eventlocation" type="text" name="eventlocation" placeholder="Event Location" size="100">
                                     </td>
                                 </tr>
+                                 <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Event City
+                                         </td>
+                                          <td>
+                                        <select class="form-control" id="eventcity" name="eventcity" class="demo-default">
+                                                    <option value="">Select City</option>
+                                                <?php 
+                                                if (count($dataCities) > 0) { 
+                                                    foreach ($dataCities as $cities) { ?>                                                        
+                                                    <option value="<?php echo $cities->getId(); ?>"
+                                                    <?php
+                                                    if ($formdata['city'] == $cities->getId()) {
+                                                        echo 'Selected';
+                                                    }
+                                                    ?>
+                                                    ><?php echo $cities->getCityName(); ?></option>
+                                                    <?php }  } ?>  
+                                                </select>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        Event venue name
+                                        Event Venue Name
                                          </td>
                                           <td>
-                                        <input class="" id="venuename" type="text" name="venuename" placeholder="Event Location" size="100">
+                                        <input class="" id="venuename" type="text" name="venuename" placeholder="Event Venue Name" size="100">
                                     </td>
                                 </tr>
                                  <tr>
@@ -221,7 +256,8 @@ jQuery.noConflict();
                                     <td>
                                         <br />
                                         <button id="organiserprofilepicture" name="organiserprofilepicture" class="btn btn-primary">Add Organiser Profile Picture</button>
-                                        <div id="outputorganisertpicture"></div>    
+                                        <div id="outputorganiserpicture"></div>    
+                                        <div id="previeworganiserpicture"></div> 
                                     </td>
                                 </tr>
                                 <tr>
@@ -230,7 +266,7 @@ jQuery.noConflict();
                                 <form id="frmOrganiser" name="frmOrganiser" method="post" action="<?php echo $this->basePath(); ?>/events/frontendeventaddprocess">
                                 <tr>
                                     <td>
-                                        Organiser name
+                                        Organiser Name
                                          </td>
                                           <td>
                                         <input class="" id="organisername" type="text" name="organisername" placeholder="Organiser Name" size="100">
@@ -357,9 +393,6 @@ jQuery.noConflict();
                 size = f.size;
                 type = f.type;
             });
-            jQuery("#outputorganisertpicture").html(text);
-//var file = this.files[0];
-   
 
             if(name.length < 1) {
             }
@@ -374,7 +407,7 @@ jQuery.noConflict();
                 var fd = new FormData();    
                 fd.append( 'file', files[0] );
                 jQuery.ajax({
-               url: "/tpsite/public/events/frontendeventimageupload", // Url to which the request is send
+                url: "/tpsite/public/events/frontendeventimageupload", // Url to which the request is send
                     type: "POST",             // Type of request to be send, called as method
                    xhr: function() {  // custom xhr
                         myXhr = jQuery.ajaxSettings.xhr();
@@ -385,7 +418,13 @@ jQuery.noConflict();
                     },
                     // Ajax events
                     success: completeHandler = function(data) {
-                       console.log(data);
+                     var dat=jQuery.parseJSON(data.FileUploadStatus);
+                      jQuery("#outputorganiserpicture").html(dat.objname);
+
+                      var im = '<img src="/tpsite/public/uploads/event/'+ dat.objname +'" width="100" height="100" />';
+                      
+                      jQuery("#previeworganiserpicture").html(im);
+
                     },
                     error: errorHandler = function() {
                         alert("Något gick fel");
@@ -402,7 +441,7 @@ jQuery.noConflict();
         
 
         }).on('cancel.bs.filedialog', function(ev) {
-            jQuery("#outputorganisertpicture").html("Cancelled!");
+            jQuery("#outputorganiserpicture").html("Cancelled!");
         });
     });
 
@@ -416,7 +455,7 @@ jQuery.noConflict();
                 size = f.size;
                 type = f.type;
             });
-            jQuery("#outputeventpicture").html(text);
+            
 //var file = this.files[0];
    
 
@@ -433,8 +472,9 @@ jQuery.noConflict();
                 var fd = new FormData();    
                 fd.append( 'file', files[0] );
                 jQuery.ajax({
-               url: "/tpsite/public/events/frontendeventimageupload", // Url to which the request is send
+                    url: "/tpsite/public/events/frontendeventimageupload", // Url to which the request is send
                     type: "POST",             // Type of request to be send, called as method
+                    dataType: 'json',
                    xhr: function() {  // custom xhr
                         myXhr = jQuery.ajaxSettings.xhr();
                         if(myXhr.upload){ // if upload property exists
@@ -444,7 +484,11 @@ jQuery.noConflict();
                     },
                     // Ajax events
                     success: completeHandler = function(data) {
-                       console.log(data);
+                      var dat=jQuery.parseJSON(data.FileUploadStatus);
+                      jQuery("#outputeventpicture").html(dat.objname);
+                      var im = '<img src="/tpsite/public/uploads/event/'+ dat.objname +'" width="100" height="100" />';
+                      jQuery("#outputeventpicture").html(dat.objname);
+                      jQuery("#previeweventpicture").html(im);
                     },
                     error: errorHandler = function() {
                         alert("File upload Error");
@@ -483,7 +527,10 @@ jQuery.noConflict();
 
 $('input#save_event_btn').click( function() {
         var $form1 = $("#frmEvent");
-           s
+        var pic = $("#outputeventpicture").text();
+        $form1.append('<input type="hidden" id="eventpicture" name="eventpicture" value="'+pic+'">');
+        var postData = $form1.serializeArray();
+        var formURL = $form1.attr("action");
         $.ajax({
             url : formURL,
             type: "POST",
@@ -492,14 +539,15 @@ $('input#save_event_btn').click( function() {
             {
                 console.log(data);
                 console.log(textStatus);
+                return;
                  $('form[name="frmOrganiser"]').each(function () {
                     var $form = $(this);
-                    var pic = $("#outputorganiserpicture").text();
-                    $form.append('<input type="hidden" id="organiserpicture" name="organiserpicture" value="'+pic+'">');
-                    $.post($form.attr("action"), $form.serialize(), function () {
-                       $form.submit();
+                    var pic1 = $("#outputorganiserpicture").text();
+                    $form.append('<input type="hidden" id="organiserpicture" name="organiserpicture" value="'+pic1+'">');
+                    //$.post($form.attr("action"), $form.serialize(), function () {
+                       //$form.submit();
                        // alert('Form 2 submitted');
-                    });
+                    //});
                 })
                 //data: return data from server
             },
@@ -510,7 +558,6 @@ $('input#save_event_btn').click( function() {
         });
       
 });
-
 </script>
 
 

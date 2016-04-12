@@ -8,6 +8,14 @@
           <li><a href="<?php echo $this->url('contactus') ?>">Contact Us</a></li>
           <li><a href="<?php echo $this->url('privacypolicy') ?>">Privacy Policy</a></li>
           <li><a href="<?php echo $this->url('deliverypolicy') ?>">Purchase Policy</a></li>
+          <li class="dropdown"> 
+           <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><?php if($this->active_city != ""){ echo $this->active_city; }else { ?>Dubai,UAE <?php } ?> <span class="caret"></span></a>
+            <ul role="menu" class="dropdown-menu">
+              <?php foreach($cities as $city): ?>
+                <li><a href="<?php echo $this->url('eventsearch',array('type'=>'city','searchval'=>$city->getId())); ?>"><?php echo $city->getCityName(); ?></a></li>
+              <?php endforeach; ?>
+            </ul>
+          </li>
           <!--<li><a href="#" class="text-yellow">List Your Event</a></li>-->
         </ul>
       </div>

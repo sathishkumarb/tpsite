@@ -1,74 +1,51 @@
-<script src="<?php echo $this->basePath('/js/jquery.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap3-typeahead.min.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/assets/event/jquery-ui.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/js/jquery.validate.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/assets/jquery-countdownTimer/jquery.countdownTimer.js'); ?>"></script> 
-
-<script type="text/javascript">jQuery.noConflict();</script>
-<script src="<?php echo $this->basePath('/assets/frontend/js/bootstrap.min.js'); ?>"></script>
-
 <script type="text/javascript">
     $(window).load(function(){
         $('#myModal').modal('show');
     });
 </script>
 <?php echo $this->headLink()->prependStylesheet($this->basePath('/assets/frontend/css/custom-style.css'))->prependStylesheet($this->basePath('/assets/frontend/css/theme-style.css'))->prependStylesheet($this->basePath('/assets/frontend/css/font-awesome.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap.min.css'))->prependStylesheet($this->basePath('/assets/frontend/css/bootstrap-theme.min.css')); ?>
+<style>
+ 
+.boxTile {  background: #333;  height: 0;  padding-bottom: 50%;  position: relative;  width: 60%;}
+.boxTile .square { position: absolute; bottom: 0;  left: 0;  right: 0;  top: 0;}
+.boxTile .square img {  display: block;   width: 50%;}
+.boxTile .info {  bottom: 0;  left: 50%;  overflow: hidden;  padding: 15px;  position: absolute;  right: 0;  top: 0;}
+.boxTile:hover .info { background: #41c6ed;}
+.boxTile .text {  color: #FFFFFF;  overflow: hidden;  width: 100%; text-align: center;}
+.boxTile .text h2 {  color: #FFF;  display: inline-block;  font-size: 130%;  margin: 8px 0; padding-right:1em;}
+.boxTile .text p {  color: #bfd540;  text-transform: uppercase;  white-space: nowrap; font-size: 80%; padding-right:1em;padding-bottom:9em;}
 
+@media (max-width: 768px) {
+.boxTile .square img {  display: block;  width: 50% !important;  }
+}
+
+@media (min-width: 768px) {
+.boxTile .square img {  display: block;  width: 50% !important;  }
+}
+
+@media (min-width: 1200px) {
+.boxTile {  padding-bottom: 30%;  }
+.boxTile .square img {  display: block;  width: 50% !important;  }
+.boxTile .info {  top: 50%;  background: #000; background: rgba(0, 0, 0, 0.6); filter: alpha(opacity=60);}
+}
+</style>
 <div class="container">
-  
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Select Cities Events</h4>
-        </div>
-        <div class="modal-body">
-              <div class="row">
+        <div><h2>Select Cities</h2></div>
+        <div class="row">
                 <?php
                 foreach ($cities as $key => $value) {
                   ?>
-                   <article class="col-sm-6 col-md-4">
-                    <a href="#">
+                   <div class="col-md-3 col-sm-3">
+                      <a href="<?php echo $this->basePath().'/events/city/'.$value->getId();?>">
                           <div class="boxTile">
-                            <div class="square">
-                                  <a href="<?php echo $this->basePath().'/events/city/'.$value->getId();?>"><img src="<?php echo $this->basePath().'/img/city_icons/'.$value->getCityImage();?>" /></a>
-                            </div>
-                            <div class="square info easeAni">
-                              <div class="text">
-                                <p><?php echo $value->getCityName();?></p>
+                              <div class="hover-content">
+                                <p align="center"><a href="<?php echo $this->basePath().'/events/city/'.$value->getId();?>"><?php echo $value->getCityName();?></a></p>
                               </div>
                             </div>
-                          </div>
-                    </a>
-                    </article>
+                      </a>
+                    </div>
                   <?php
                 }
                ?>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-  
 </div>
-<script type='text/javascript'>
-
-    $(document).ready(function() {
-$('#myCarousel').carousel({
-interval: 10000
-})
-
-$('#myCarousel').on('slid.bs.carousel', function() {
-alert("slid");
-});
-
-
-});
-</script>

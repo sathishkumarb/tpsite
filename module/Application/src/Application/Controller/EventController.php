@@ -119,7 +119,6 @@ class EventController extends AbstractActionController {
         return $this->authservice;
     }
 
-
     /**
      * Deleted image with from a given src.
      *
@@ -195,16 +194,17 @@ class EventController extends AbstractActionController {
         $scheme = $uri->getScheme();
         $host = $uri->getHost();
         $base = sprintf('%s://%s', $scheme, $host);
-        //     $uploadsDir = getcwd() . '/public/uploads';
-        //     if (!file_exists($uploadsDir)) {
-        //         mkdir(($uploadsDir), 0777, true);
-        //     }
-        //     $uploadsDirPath = getcwd() . '/public/uploads/event/';
-        //     if (!file_exists($uploadsDirPath)) {
-        //         mkdir(($uploadsDirPath), 0777, true);
-        //     }
 
-        $adapter->setDestination( getcwd() .'/public/uploads/event');
+        $uploadsDir = getcwd() . '/public/uploads';
+        if (!file_exists($uploadsDir)) {
+            mkdir(($uploadsDir), 0777, true);
+        }
+        $uploadsDirPath = getcwd() . '/public/uploads/event/';
+        if (!file_exists($uploadsDirPath)) {
+            mkdir(($uploadsDirPath), 0777, true);
+        }
+
+        $adapter->setDestination( $uploadsDirPath);
 
         return $this->uploadFiles($adapter);
     }
@@ -223,11 +223,16 @@ class EventController extends AbstractActionController {
                     $uploadStatus['errorFiles'][] = $file['name'].' '.strtolower($msg);
                 }
             }
-
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $newFileName = md5(rand(). $file['name']) . '.' . $ext;
+            $adapter->addFilter('Rename', array('target' => getcwd() . '/public/uploads/event/'.$newFileName,'overwrite' => true));
             // @codeCoverageIgnoreStart
+            
             if (!$adapter->receive($file['name'])) {
+                $uploadStatus['objname'][] = $file['name'];
                 $uploadStatus['errorFiles'][] = $file['name'].' was not uploaded';
             } else {
+                $uploadStatus['objname'][] = $newFileName;
                 $uploadStatus['successFiles'][] = $file['name'].' was successfully uploaded';
             }
             // @codeCoverageIgnoreEnd
@@ -251,12 +256,12 @@ class EventController extends AbstractActionController {
             $data = array();
 
             if ($request->isXmlHttpRequest()) {
-                $data = $this->prepareImages();
+                $filedata = $this->prepareImages();
             }
                                         
         }
-        return new ViewModel(array(
-            'dataCategories' => json_encode($cat),
+        return new JsonModel(array(
+            'FileUploadStatus' => json_encode($filedata),
         ));
     }
 
@@ -265,33 +270,34 @@ class EventController extends AbstractActionController {
         $em = $this->getEntityManager(); /* Call Entity Manager */
 
         $objCategories = $em->getRepository('Admin\Entity\Categories')->findBy(array('status' => 1));
+        $objCities = $em->getRepository('\Admin\Entity\City')->findAll();
         $objCountries = $em->getRepository('Admin\Entity\Countries')->findBy(array('countryExist' => 1));
-                $cat = array();
-        foreach ($objCategories as $index =>$categories) {                                                        
+        // $cat = array();
+
+        // foreach ($objCategories as $index =>$categories) {                                                        
            
-           $cat[$index]['id'] = $categories->getCategoryName();
-           $cat[$index]['name'] = $categories->getCategoryName();
+        //    $cat[$index]['id'] = $categories->getCategoryName();
+        //    $cat[$index]['name'] = $categories->getCategoryName();
            
-        }                                
+        // }  
+
         return new ViewModel(array(
-            'dataCategories' => json_encode($cat),
+            //'dataCategories' => json_encode($cat),
+            'dataCategories' => $objCategories,
             'dataCountries' => $objCountries,
+            'dataCities' => $objCities,
         ));
     }
 
     public function frontendeventaddprocessAction(){
+$request = $this->getRequest();  /* Fetching Request */
 
-        $request = $this->getRequest();  /* Fetching Request */
+        
         $formdata = array();
-        echo "<pre>";
-        print_r($request->getPost());
-        print_r($request->getFiles()->toArray());
-        echo "<pre>";
-        die();
+
         if ($request->isPost()) {
+
           
-            $files =  $request->getFiles()->toArray();
-            //$fileName = $files['picture']['name'];
             $request = $this->getRequest();
 
             $this->layout()->pageTitle = 'Add Event'; /* Setting page title */
@@ -302,34 +308,54 @@ class EventController extends AbstractActionController {
             $data = $request->getPost();
             $eventname = $data['eventname'];
             $eventlink = $data['youtubelink'];
-            $txtvenue_title = $data['txtvenue_title'];
+            $venuename = $data['venuename'];
             $eventlocation = $data['eventlocation'];
             $eventcategory = $data['eventcategory'];
-            $eventcategory = implode(', ', $eventcategory);
-      
+            $eventcity = $data['eventcity'];
+            $eventinfo = $data['eventinfo'];
+            $eventpicture = $data['eventpicture'];
+ 
             try {
+                echo "coming";
+                $objCityId = $em->getRepository('Admin\Entity\City')->findOneBy(array('id' => $eventcity));
+                $objCountryId = $em->getRepository('Admin\Entity\Countries')->findOneBy(array('id' => $objCityId->getCountryId()));
+                $objCategoryId = $em->getRepository('Admin\Entity\Categories')->findOneBy(array('id' => $eventcategory));
+                $objLayoutId = $em->getRepository('Admin\Entity\Layout')->findOneBy(array('id' => 1));
+              
                 $currentDate = date_create(date('Y-m-d H:i:s'));
                 // Save Event details
                 $eventObj = new Entities\Event();
                 $eventObj->setEventName($eventname);
-                $eventObj->setEventDesc($txtdesc);
-                $eventObj->setEventVenueTitle($txtvenue_title);
-                $eventObj->setEventImageBig($dataEvent['event_image_big']);
-                $eventObj->setEventImageMedium($dataEvent['event_image_medium']);
-                $eventObj->setEventImageSmall($dataEvent['event_image_small']);
-                $eventObj->setEventImageBanner($dataEvent['event_image_banner']);
+                $eventObj->setEventDesc($eventinfo);
+                $eventObj->setEventCountry($objCountryId);
+                $eventObj->setEventCity($objCityId);
+                $eventObj->setEventVenueTitle($venuename);
+                $eventObj->setEventImageBig($eventpicture);
                 $eventObj->setEventLink($eventlink);
-                $eventObj->setCategory($eventcategory);
+                $eventObj->setCategory($objCategoryId);
                 $eventObj->setStatus(1);
+                $eventObj->setLayout($objLayoutId);
                 $eventObj->setCreatedDate($currentDate);
+               
                 $em->persist($eventObj);
                 $em->flush();
+                echo "last insert event id".$eventObj->getId();
+                die();
+               
             } catch (Zend_Exception $e) {
-                echo "Caught exception: " . get_class($e) . "\n";
-                echo "Message: Event Entity" . $e->getMessage() . "\n";
-                exit();
+
+               
+                 return new JsonModel(array(
+                'eventId' => $eventObj->getId(),
+                'message' => "Caught exception: " . get_class($e)." Message: Event Entity" . $e->getMessage(),
+
+            ));
+               
             }
+           
+
         }
+
         //     $uploadsDir = getcwd() . '/public/uploads';
     }
     
@@ -586,9 +612,6 @@ class EventController extends AbstractActionController {
      */
     public function eventsbycategoryAction() {
         $this->layout()->pageTitle = " Category Events";
-        echo "<pre>";
-        print_r($tmpevent);
-        die;
         return array('events' => $tmpevent, 'category' => $catarr);
     }
 

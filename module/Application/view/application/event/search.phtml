@@ -15,11 +15,11 @@ if(count($this->events) > 0){
     <!--/overlay--> 
     <div class="hover-overlay">
          <div class="hover-content"><img src="<?php echo $this->basePath('/assets/frontend/images/img-hover-logo.png');?>" alt=""><br>
-           <!--span class="hover_buy">Buy Tickets</span --> 
-            <span class="hover_buy">Coming Soon</span> 
+           <span class="hover_buy">Buy Tickets</span> 
+            <!--span class="hover_buy">Coming Soon</span--> 
         </div>
-        <!-- a class="detail_link-overlay" href="<?php echo $this->url('eventdetail', array('eventId' => $event['eventid'])); ?>"></a -->
-        <a class="detail_link-overlay" href="#"></a>
+        <a class="detail_link-overlay" href="<?php echo $this->url('eventdetail', array('eventId' => $event['eventid'])); ?>"></a>
+        <!--a class="detail_link-overlay" href="#"></a -->
     </div>
         <!--/hover-overlay--> 
                    
@@ -77,7 +77,7 @@ if(count($this->events) > 0){
  <?php $commonViewHelper = $this->Commonviewhelper(); ?>
 <div class="search-result" id="all-results">
       <div class="venue-results">
-        <h2 class="heading-2"><?php echo $this->search_title; ?></h2>
+        <!--h2 class="heading-2"><?php echo $this->search_title; ?></h2-->
         <div class="row">
           <div class="col-md-8 border-right">
 		  <h5>events</h5>
@@ -87,7 +87,7 @@ if(count($this->events) > 0){
                 foreach($this->events as $event){
                 ?>
                <div class="col-md-6 col-sm-6">
-                    
+                   <a class="detail_link-overlay" href="<?php echo $this->url('eventdetail', array('eventId' => $event['eventid'])); ?>">
                    <div class="img-wrapper"> <img alt="" src="<?php echo $this->basePath(); ?>/uploads/event/<?php echo $event['img']; ?>">
                    <div class="overlay">
                      <div class="overlay-contents">
@@ -96,11 +96,11 @@ if(count($this->events) > 0){
                      </div>
                      <div class="hover-overlay">
                      	<div class="hover-content"><img src="<?php echo $this->basePath('/assets/frontend/images/img-hover-logo.png');?>" alt=""><br>
-                        <!--span class="hover_buy">Buy Tickets</span --> 
-                          <span class="hover_buy">Coming Soon</span> 
+                        <span class="hover_buy">Buy Tickets</span> 
+                          <!--span class="hover_buy">Coming Soon</span--> 
                       </div>
-                      <!-- a class="detail_link-overlay" href="<?php echo $this->url('eventdetail', array('eventId' => $event['eventid'])); ?>"></a -->
-                      <a class="detail_link-overlay" href="#"></a>
+                      </a>
+                      
                      </div>
                    </div>
                    <!--/overlay-->  

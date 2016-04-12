@@ -64,10 +64,10 @@ class City extends \Admin\Entity\City implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'id', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'countryId', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'cityName', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'supported', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'lastUpdated');
+            return array('__isInitialized__', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'id', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'countryId', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'cityName', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'cityImage', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'supported', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'lastUpdated');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'id', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'countryId', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'cityName', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'supported', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'lastUpdated');
+        return array('__isInitialized__', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'id', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'countryId', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'cityName', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'cityImage', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'supported', '' . "\0" . 'Admin\\Entity\\City' . "\0" . 'lastUpdated');
     }
 
     /**
@@ -230,6 +230,28 @@ class City extends \Admin\Entity\City implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCityName', array());
 
         return parent::getCityName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCityImage($cityImage)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCityImage', array($cityImage));
+
+        return parent::setCityImage($cityImage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCityImage()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCityImage', array());
+
+        return parent::getCityImage();
     }
 
     /**

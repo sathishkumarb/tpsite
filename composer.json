@@ -16,6 +16,7 @@
         "cyrkulewski/shopping-cart": "^1.0",
 		"dino/dompdf-module": "dev-master",
         "facebook/php-sdk-v4": "@stable",
-        "beberlei/DoctrineExtensions": "^1.0"
+        "beberlei/DoctrineExtensions": "^1.0",
+        "tck/zf2-imageresizer": "1.*"
     }
 }
