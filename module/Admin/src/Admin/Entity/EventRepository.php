@@ -200,7 +200,7 @@ class EventRepository extends EntityRepository {
         return $Result;
     }
     /**
-     * getSearchEvent - Fetch Events on basis of City or category 
+     * getDateEvent - Fetch Events on basis of City or category 
      * @param integer $city
      * @param integer $categoryId
      * @return \Admin\Entity\Event - Array of events
@@ -287,6 +287,7 @@ class EventRepository extends EntityRepository {
         $query = $query->join('e.eventSchedule', 's');
         $query = $query->join('e.category', 'c');
         $query = $query->join('e.eventCity', 'cities');
+        $query = $query->leftJoin('e.eventDisplayCities', 'd');
 //      $query = $query->join('e.eventOption', 'o');
 //      $query = $query->join('e.eventSeat', 'es');
         $query = $query->where("e.status = 1");
@@ -318,7 +319,8 @@ class EventRepository extends EntityRepository {
         }
         //$query = $query->andWhere("e.status = 1");
         //$query = $query->andWhere("s.eventDate >= '".date('Y-m-d')."'");
-        //$query = $query->andWhere("s.isDeleted = 0");   
+        //$query = $query->andWhere("s.isDeleted = 0");
+        $query = $query->orWhere("d.evCity = '" . $val . "'");      
         if ($offset != null) {
             $query = $query->setFirstResult($offset);
         }
@@ -326,10 +328,10 @@ class EventRepository extends EntityRepository {
             $query = $query->setMaxResults($limit);
         }
         $query = $query->getQuery();
-//        echo $query->getSQL();
-//        $parameters = $query->getParameters();
+        //echo $query->getSQL();
+        $parameters = $query->getParameters();
 //        print_r($parameters);
-//        die;
+        //die();
         $Result = $query->getResult();
         return $Result;
     }

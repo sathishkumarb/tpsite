@@ -84,7 +84,7 @@ if(count($this->events) > 0){
             <div id="upcoming-events" class="row data1">
                <?php
                if(count($this->events) > 0){
-                foreach($this->events as $event){
+                 foreach($this->events as $event){
                 ?>
                <div class="col-md-6 col-sm-6">
                    <a class="detail_link-overlay" href="<?php echo $this->url('eventdetail', array('eventId' => $event['eventid'])); ?>">

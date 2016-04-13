@@ -219,6 +219,13 @@ class Event {
      */
     private $eventOption;
 
+     /**
+     * @var \Admin\Entity\EventDisplayCities
+     * 
+     * @ORM\OneToMany(targetEntity="Admin\Entity\EventDisplayCities", mappedBy="event")
+     * @ORM\JoinColumn(name="id", referencedColumnName="event_id")
+     */
+	private $eventDisplayCities;
     /**
      * Get id
      *
@@ -756,5 +763,21 @@ class Event {
     public function getEventSeat() {
         return $this->eventSeat;
     }
+  
 
+    /**
+     * Set eventDisplayCities
+     *
+     * @param \Admin\Entity\Countries $eventCountry
+     *
+     * @return Event
+     */
+    public function setEventDisplayCities(\Admin\Entity\EventDisplayCities $eventDisplayCities = null) {
+        $this->eventDisplayCities = $eventDisplayCities;
+
+        return $this;
+    }
+	public function getEventDisplayCities() {
+        return $this->eventDisplayCities;
+    }
 }
